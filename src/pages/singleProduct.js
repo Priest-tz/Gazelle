@@ -12,32 +12,41 @@ import Gallery from "../components/imageGallery";
 import { useProducts } from "../context/productsContext";
 import { useShoppingCart } from "../context/cartContext";
 
+// The main component for rendering a product page
 const ProductPage = () => {
+	// State variables
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [selectedSize, setSelectedSize] = React.useState("");
 	const [selectedQuantity, setSelectedQuantity] = React.useState(1);
+
+	// Accessing data from context and location
 	const products = useProducts();
 	const location = useLocation();
 	const isMounted = React.useRef(true);
 	const { dispatch } = useShoppingCart();
 
+	// Extracting the product ID from the URL
 	const productId = String(location.pathname.split("/").pop());
 
+	// Effect to handle loading and cleanup
 	React.useEffect(() => {
 		isMounted.current = true;
 
+		// Simulate a loading delay for 2 seconds
 		const loadingTimer = setTimeout(() => {
 			if (isMounted.current) {
 				setIsLoading(false);
 			}
 		}, 2000);
 
+		// Cleanup function to avoid memory leaks
 		return () => {
 			isMounted.current = false;
 			clearTimeout(loadingTimer);
 		};
 	}, []);
 
+	// Event handlers for size and quantity changes
 	const handleSizeChange = (size) => {
 		setSelectedSize(size);
 	};
@@ -46,8 +55,11 @@ const ProductPage = () => {
 		setSelectedQuantity(quantity);
 	};
 
+	// Event handler for adding the product to the cart
 	const handleAddToCart = () => {
+		// Check if product and size are selected
 		if (product && selectedSize) {
+			// Create a cart item object
 			const cartItem = {
 				id: product.id,
 				name: product.modelName,
@@ -56,34 +68,43 @@ const ProductPage = () => {
 				price: product.price,
 			};
 
+			// Dispatch an action to add the item to the cart
 			dispatch({
 				type: "ADD_TO_CART",
 				payload: cartItem,
 			});
 
+			// Log a message indicating the addition to the cart
 			console.log("Added to Cart", cartItem);
 		}
 	};
 
+	// Find the product based on the ID from the products array
 	const product = products.find((p) => p.id === productId);
 
+	// JSX structure for rendering the product page
 	return (
 		<div className="productPage">
 			{isLoading ? (
 				<Spinloader />
 			) : (
 				<>
+					{/* Render navigation bar */}
 					<Navbar />
 
+					{/* Main product container */}
 					<div className="sProductContainer">
 						{product ? (
 							<>
+								{/* Render image gallery component */}
 								<Gallery product={product} />
 
+								{/* Product details section */}
 								<div className="productDetails">
 									<h2>{product.modelName}</h2>
 									<p>{product.price}</p>
 
+									{/* Render size picker if sizes are available */}
 									{product.sizes &&
 										product.sizes.length > 0 && (
 											<SizePicker
@@ -95,6 +116,7 @@ const ProductPage = () => {
 											/>
 										)}
 
+									{/* Render quantity picker */}
 									<QuantityPicker
 										selectedQuantity={selectedQuantity}
 										handleQuantityChange={
@@ -102,6 +124,7 @@ const ProductPage = () => {
 										}
 									/>
 
+									{/* Render product descriptions */}
 									<div className="productDesc">
 										<ul>
 											{product.descriptions.map(
@@ -114,6 +137,7 @@ const ProductPage = () => {
 										</ul>
 									</div>
 
+									{/* Actions section with Add to Cart and Buy Now buttons */}
 									<div className="actions">
 										<button
 											className="addToCartBtn"
@@ -138,14 +162,17 @@ const ProductPage = () => {
 										</button>
 									</div>
 
+									{/* Render size chart dropdown */}
 									<SizeChartDropdown />
 								</div>
 							</>
 						) : (
+							// Display an error message if product not found
 							<p>Oops! Product not found</p>
 						)}
 					</div>
 
+					{/* Render footer */}
 					<Footer />
 				</>
 			)}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const spinloader = () => {
+const spinLoader = () => {
   return (
     <div className="loaderContainer">
       <div className="loader"></div>
@@ -8,4 +8,4 @@ const spinloader = () => {
   );
 };
 
-export default spinloader;
+export default spinLoader;
