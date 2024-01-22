@@ -8,92 +8,111 @@ import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import { useProducts } from "../context/productsContext";
 
 const ShopPage = () => {
-	const [isNavVisible, setIsNavVisible] = React.useState(false);
-	const [isLoading, setIsLoading] = React.useState(true);
-	const navigate = useNavigate();
-	const products = useProducts();
+  // State variables
+  const [isNavVisible, setIsNavVisible] = React.useState(false);
+  const [isLoading, setIsLoading] = React.useState(true);
+  const navigate = useNavigate();
+  const products = useProducts();
 
-	const isMounted = React.useRef(true);
+  // Ref to track component mounting state
+  const isMounted = React.useRef(true);
 
-	React.useEffect(() => {
-		isMounted.current = true;
+  // Effect to handle component mounting and loading state
+  React.useEffect(() => {
+    isMounted.current = true;
 
-		const loadingTimer = setTimeout(() => {
-			if (isMounted.current) {
-				setIsLoading(false);
-			}
-		}, 2000);
+    // Simulate a loading delay of 2 seconds
+    const loadingTimer = setTimeout(() => {
+      if (isMounted.current) {
+        setIsLoading(false);
+      }
+    }, 2000);
 
-		return () => {
-			isMounted.current = false;
-			clearTimeout(loadingTimer);
-		};
-	}, []);
+    // Cleanup function to avoid memory leaks
+    return () => {
+      isMounted.current = false;
+      clearTimeout(loadingTimer);
+    };
+  }, []);
 
-	const toggleNavVisibility = () => {
-		setIsNavVisible(!isNavVisible);
-	};
+  // Toggle navigation visibility
+  const toggleNavVisibility = () => {
+    setIsNavVisible(!isNavVisible);
+  };
 
-	const closeNav = () => {
-		setIsNavVisible(false);
-	};
+  // Close navigation
+  const closeNav = () => {
+    setIsNavVisible(false);
+  };
 
-	const handleProductClick = (product) => {
-		navigate(`/sproduct/${product.id}`);
-	};
+  // Handle click on a product card
+  const handleProductClick = (product) => {
+    navigate(`/sproduct/${product.id}`);
+  };
 
-	return (
-		<div className="shopPage">
-			{isLoading ? (
-				<Spinloader />
-			) : (
-				<>
-					<Navbar
-						isNavVisible={isNavVisible}
-						toggleNavVisibility={toggleNavVisibility}
-						closeNav={closeNav}
-					/>
+  // Render the component
+  return (
+    <div className="shopPage">
+      {isLoading ? (
+        // Render a spinner while loading
+        <Spinloader />
+      ) : (
+        // Render the main content after loading
+        <>
+          {/* Navbar component */}
+          <Navbar
+            isNavVisible={isNavVisible}
+            toggleNavVisibility={toggleNavVisibility}
+            closeNav={closeNav}
+          />
 
-					<div className="productContainer">
-						{products.map((product) => (
-							<div
-								key={product.id}
-								className="productCard"
-								onClick={() => handleProductClick(product)}>
-								<img
-									src={product.imageUrl[0]}
-									alt={product.brandName}
-									className="productImage"
-								/>
+          {/* Product container */}
+          <div className="productContainer">
+            {/* Map through products and render product cards */}
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="productCard"
+                onClick={() => handleProductClick(product)}
+              >
+                {/* Product image */}
+                <img
+                  src={product.imageUrl[0]}
+                  alt={product.brandName}
+                  className="productImage"
+                />
 
-								<div className="content">
-									<span>{product.brandName}</span>
-									<p>{product.model}</p>
+                {/* Product details */}
+                <div className="content">
+                  <span>{product.brandName}</span>
+                  <p>{product.model}</p>
 
-									<div className="cardFooter">
-										<p>{product.price}</p>
-										<Link to="/cart" title="Add to Cart">
-											<FontAwesomeIcon
-												icon={faShoppingCart}
-											/>
-										</Link>
-									</div>
-								</div>
-							</div>
-						))}
-					</div>
+                  {/* Product card footer */}
+                  <div className="cardFooter">
+                    <p>{product.price}</p>
+                    {/* Link to add product to cart */}
+                    <Link to="/cart" title="Add to Cart">
+                      <FontAwesomeIcon icon={faShoppingCart} />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
 
-					<div className="seeMore">
-						<Link to="/all-products">
-							<button type="button">See More</button>
-						</Link>
-					</div>
+          {/* See more button */}
+          <div className="seeMore">
+            <Link to="/all-products">
+              <button type="button">See More</button>
+            </Link>
+          </div>
 
-					<Footer />
-				</>
-			)}
-		</div>
-	);
+          {/* Footer component */}
+          <Footer />
+        </>
+      )}
+    </div>
+  );
 };
 
 export default ShopPage;
