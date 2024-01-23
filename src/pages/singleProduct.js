@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Spinloader from "../components/spinningLoader";
 import Navbar from "../components/navigation";
 import Footer from "../components/footer";
@@ -22,6 +22,7 @@ const ProductPage = () => {
 	// Accessing data from context and location
 	const products = useProducts();
 	const location = useLocation();
+	const navigate = useNavigate();
 	const isMounted = React.useRef(true);
 	const { dispatch } = useShoppingCart();
 
@@ -76,6 +77,35 @@ const ProductPage = () => {
 
 			// Log a message indicating the addition to the cart
 			console.log("Added to Cart", cartItem);
+		}
+	};
+
+	// Event handler for handling the "Buy Now" button click
+	const handleCheckout = () => {
+		console.log("handleCheckout function called");
+
+		// Check if product and size are selected
+		if (product && selectedSize) {
+			// Create a cart item object
+			const cartItem = {
+				id: product.id,
+				name: product.modelName,
+				size: selectedSize,
+				quantity: selectedQuantity,
+				price: product.price,
+			};
+
+			// Dispatch an action to add the item to the cart
+			dispatch({
+				type: "ADD_TO_CART",
+				payload: cartItem,
+			});
+
+			// Log a message indicating the addition to the cart
+			console.log("Added to Cart", cartItem);
+
+			// Use the useNavigate hook to navigate to "/checkout"
+			navigate("/checkout");
 		}
 	};
 
@@ -151,11 +181,8 @@ const ProductPage = () => {
 										</button>
 
 										<button
-											className="buyNowBtn"
-											onClick={() => {
-												// Handle buy now logic
-												console.log("Buy Now");
-											}}>
+											className="checkOutBtn"
+											onClick={handleCheckout}>
 											<span className="buttonText">
 												Proceed to checkout
 											</span>

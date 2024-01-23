@@ -719,7 +719,7 @@ footer {
 					}
 				}
 
-				.buyNowBtn {
+				.checkOutBtn {
 					width: 240px;
 					height: 48px;
 					border-radius: 8px;
@@ -733,4 +733,11 @@ footer {
 			}
 		}
 	}
+}
+
+.checkoutPage{
+	background-color: $primaryBgColor;
+	color: $productTextColor;
+	height: 100%;
+
 }
