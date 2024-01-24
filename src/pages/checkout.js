@@ -51,18 +51,6 @@ const Checkout = () => {
 		setIsNavVisible(false);
 	};
 
-	// Function to calculate the total product price
-	const calculateTotalProductPrice = () => {
-		return cart.reduce(
-			(total, product) => total + product.price * product.quantity,
-			0
-		);
-	};
-
-	const totalProductPrice = calculateTotalProductPrice();
-	const { shippingFee } = calculateShippingFee();
-	const totalAmount = totalProductPrice + shippingFee;
-
 	return (
 		<div className="checkoutPage">
 			{isLoading ? (
@@ -140,7 +128,6 @@ const Checkout = () => {
 								{/* Shipping options */}
 								<ShippingOptions
 									cart={cart}
-									onContinue={handleContinue}
 								/>
 
 								{/* Total summary and Pay button */}
@@ -153,13 +140,13 @@ const Checkout = () => {
 										<div className="content">
 											<span className="totalPrice">
 												Total Product Price: ₦
-												{totalProductPrice}
+												{}
 											</span>
 											<span className="totalshipFee">
-												Shipping Fees: ₦{shippingFee}
+												Shipping Fees: ₦{}
 											</span>
 											<span className="totalSum">
-												Total: ₦{totalAmount}
+												Total: ₦{}
 											</span>
 										</div>
 									</div>

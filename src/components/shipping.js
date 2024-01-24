@@ -54,7 +54,7 @@ const ShippingOptions = ({ cart, onContinue, onBack }) => {
 			onContinue({
 				shippingOption,
 				productDetails,
-				shippingFee: calculatedShippingFee,
+				calculatedShippingFee,
 			});
 		} else {
 			console.error("Validation errors:", errors);
