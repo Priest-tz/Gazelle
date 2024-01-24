@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { useShoppingCart } from "../context/cartContext";
 import Navbar from "../components/navigation";
 import SpinLoader from "../components/spinningLoader";
@@ -10,7 +11,6 @@ import ShippingOptions from "../components/shipping";
 
 const Checkout = () => {
 	const [isLoading, setIsLoading] = React.useState(true);
-	const [currentStep, setCurrentStep] = React.useState(1);
 	const [isNavVisible, setIsNavVisible] = React.useState(false);
 	const { cartState, dispatch } = useShoppingCart();
 	const { items: cart } = cartState;
@@ -34,10 +34,10 @@ const Checkout = () => {
 		};
 	}, []);
 
-	const handleRemoveFromCart = (productId) => {
+	const handleRemoveFromCart = (product) => {
 		dispatch({
 			type: "REMOVE_FROM_CART",
-			payload: { id: productId },
+			payload: product,
 		});
 	};
 
@@ -51,117 +51,117 @@ const Checkout = () => {
 		setIsNavVisible(false);
 	};
 
-	const moveToNextStep = () => {
-		setCurrentStep(currentStep + 1);
+	// Function to calculate the total product price
+	const calculateTotalProductPrice = () => {
+		return cart.reduce(
+			(total, product) => total + product.price * product.quantity,
+			0
+		);
 	};
+
+	const totalProductPrice = calculateTotalProductPrice();
+	const { shippingFee } = calculateShippingFee();
+	const totalAmount = totalProductPrice + shippingFee;
 
 	return (
 		<div className="checkoutPage">
-			{/* Navbar component */}
-			<Navbar
-				isNavVisible={isNavVisible}
-				toggleNavVisibility={toggleNavVisibility}
-				closeNav={closeNav}
-			/>
+			{isLoading ? (
+				// Render a spinner while loading
+				<SpinLoader />
+			) : (
+				<>
+					{/* Navbar component */}
+					<Navbar
+						isNavVisible={isNavVisible}
+						toggleNavVisibility={toggleNavVisibility}
+						closeNav={closeNav}
+					/>
 
-			<div className="checkoutHeader">
-				{currentStep > 1 && (
-					<Link
-						to="/shop"
-						className="backLink"
-						onClick={() => setCurrentStep(1)}>
-						<FontAwesomeIcon icon={faArrowLeft} />
-						Back to Shop
-					</Link>
-				)}
-				<h2>Checkout - Step {currentStep}</h2>
-			</div>
+					<div className="checkoutHeader">
+						<Link to="/shop" className="backLink">
+							<FontAwesomeIcon icon={faArrowLeft} />
+							&nbsp;Back to Shop
+						</Link>
+					</div>
 
-			<div className="checkoutContainer">
-				{isLoading ? (
-					// Render a spinner while loading
-					<SpinLoader />
-				) : (
-					// Render the main content after loading
-					<>
-						{/* Checkout content based on current step */}
-						{currentStep === 1 && (
+					<div className="checkoutContainer">
+						{/* Checkout content */}
+						{cart.length === 0 ? (
+							<p>
+								Your cart is empty. Add some products from the
+								shop.
+							</p>
+						) : (
 							<>
-								{cart.length === 0 ? (
-									<p>
-										Your cart is empty. Add some products
-										from the shop.
-									</p>
-								) : (
-									<>
-										{/* Products in the cart */}
-										<div className="cartContainer">
-											{cart.map((product) => (
-												<div
-													key={product.id}
-													className="cartItem">
-													<span>
-														{product.brandName}
-													</span>
-													<p>{product.description}</p>
-													<p>
-														Quantity:{" "}
-														{product.quantity}
+								{/* Products in the cart */}
+								<div className="cartContainer">
+									<span className="order">Order Summary</span>
+									{cart.map((product) => (
+										<div
+											key={product.id}
+											className="cartItem">
+											<div className="productImg">
+												<img
+													src={product.image}
+													alt={product.brandName}
+												/>
+											</div>
+											<div className="content">
+												<span className="header">
+													<p className="name">
+														{product.name}
 													</p>
-													<p>Size: {product.size}</p>
-													<p>
-														Price: {product.price}
+													<p className="price">
+														{product.price}
 													</p>
-													<button
-														onClick={() =>
-															handleRemoveFromCart(
-																product.id
-															)
-														}
-														className="removeFromCartBtn">
-														Remove
-													</button>
-												</div>
-											))}
+												</span>
+												<span className="qty">
+													Quantity:
+													<p>{product.quantity}</p>
+												</span>
+												<span className="size">
+													Size:<p>{product.size}</p>
+												</span>
+												<FontAwesomeIcon
+													icon={faTrash}
+													onClick={() =>
+														handleRemoveFromCart(
+															product
+														)
+													}
+													className="removeFromCartBtn"
+													title="Remove from cart"
+												/>
+											</div>
 										</div>
-										<button
-											className="checkoutBtn"
-											onClick={moveToNextStep}>
-											Proceed to Shipping
-										</button>
-									</>
-								)}
-							</>
-						)}
+									))}
+								</div>
 
-						{currentStep === 2 && (
-							<>
-								<ShippingOptions cart={cart} />
-								<button
-									className="checkoutBtn"
-									onClick={moveToNextStep}>
-									Proceed to Payment
-								</button>
-							</>
-						)}
+								{/* Shipping options */}
+								<ShippingOptions
+									cart={cart}
+									onContinue={handleContinue}
+								/>
 
-						{currentStep === 3 && (
-							<>
 								{/* Total summary and Pay button */}
 								<div className="checkoutFooter">
 									<div className="totalSummary">
-										<p>
-											Total Product Price:{" "}
-											{/* Calculate total product price */}
-										</p>
-										<p>
-											Shipping Fees:{" "}
-											{/* Calculate shipping fees */}
-										</p>
-										<p>
-											Total:{" "}
-											{/* Calculate total including product price and shipping fees */}
-										</p>
+										<span className="summaryHead">
+											Total Summary
+										</span>
+
+										<div className="content">
+											<span className="totalPrice">
+												Total Product Price: ₦
+												{totalProductPrice}
+											</span>
+											<span className="totalshipFee">
+												Shipping Fees: ₦{shippingFee}
+											</span>
+											<span className="totalSum">
+												Total: ₦{totalAmount}
+											</span>
+										</div>
 									</div>
 									<button className="checkoutBtn">
 										Pay Now
@@ -169,10 +169,10 @@ const Checkout = () => {
 								</div>
 							</>
 						)}
-					</>
-				)}
-			</div>
-			<Footer />
+					</div>
+					<Footer />
+				</>
+			)}
 		</div>
 	);
 };

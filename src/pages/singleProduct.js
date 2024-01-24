@@ -63,12 +63,12 @@ const ProductPage = () => {
 			// Create a cart item object
 			const cartItem = {
 				id: product.id,
-				name: product.modelName,
+				name: product.model,
+				image: product.imageUrl[0],
 				size: selectedSize,
 				quantity: selectedQuantity,
 				price: product.price,
 			};
-
 			// Dispatch an action to add the item to the cart
 			dispatch({
 				type: "ADD_TO_CART",
@@ -89,7 +89,8 @@ const ProductPage = () => {
 			// Create a cart item object
 			const cartItem = {
 				id: product.id,
-				name: product.modelName,
+				name: product.model,
+				image: product.imageUrl[0],
 				size: selectedSize,
 				quantity: selectedQuantity,
 				price: product.price,
@@ -131,7 +132,7 @@ const ProductPage = () => {
 
 								{/* Product details section */}
 								<div className="productDetails">
-									<h2>{product.modelName}</h2>
+									<h2>{product.model}</h2>
 									<p>{product.price}</p>
 
 									{/* Render size picker if sizes are available */}

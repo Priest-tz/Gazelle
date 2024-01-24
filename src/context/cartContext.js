@@ -21,12 +21,10 @@ const cartReducer = (state, action) => {
 
 		// If the action type is "REMOVE_FROM_CART"
 		case REMOVE_FROM_CART:
-			// Returning a new state with the item removed from the cart
+			// Returning a new state with the entry removed from the cart
 			return {
 				...state,
-				items: state.items.filter(
-					(item) => item.id !== action.payload.id
-				),
+				items: state.items.filter((item) => item !== action.payload),
 			};
 
 		// If the action type doesn't match any case, return the current state
