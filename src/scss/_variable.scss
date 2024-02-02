@@ -1,0 +1,25 @@
+@font-face {
+	font-family: "Kingthings-Spikeless";
+	src: url("https://res.cloudinary.com/dgnb567j3/raw/upload/v1705002858/Gazelle/Kingthings-Spikeless/iefpk4de4fmqxycagtth.ttf")
+		format("truetype");
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Spartan:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+$fontFamily: "Spartan", sans-serif;
+$altFontFamily: "Kingthings-Spikeless";
+$primaryBgColor: #ced4da;
+$altBgColor: #d9dbe0;
+$primaryTextColor: #f8f9fa;
+$altTextColor: #e9ecef;
+$productTextColor: #606063;
+$checkoutBgColor: #dcdfe2;
+$buttonColor: #912f56;
+$altBtnColor: #5f9e63;
+$borderColor: #6c757d;
+
+$fontWeightLight: 300;
+$fontWeightRegular: 400;
+$fontWeightMedium: 500;
+$fontWeightMid: 600;
+$fontWeightBold: 700;

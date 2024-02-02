@@ -1,27 +1,49 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { db, collection, getDocs } from "../firebase/firebase";
+import Spinloader from "../components/spinningLoader";
 
-// Create a context object to hold the state and provide it to components
 const ProductsContext = createContext();
 
-// Custom hook to conveniently access the context value within components
 export const useProducts = () => {
-	// Retrieve the context value using the useContext hook
 	const context = useContext(ProductsContext);
 
-	// Throw an error if the hook is used outside of a ProductsProvider
 	if (!context) {
 		throw new Error("useProducts must be used within a ProductsProvider");
 	}
 
-	// Return the context value
 	return context;
 };
 
-// Provider component to wrap the part of the component tree where the context is needed
-export const ProductsProvider = ({ children, value }) => {
-	// Render the context provider with the provided value and nested child components
+export const ProductsProvider = ({ children }) => {
+	const [products, setProducts] = useState([]);
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		const fetchProducts = async () => {
+			try {
+				const productsCollection = collection(db, "products");
+				const productsSnapshot = await getDocs(productsCollection);
+				const productsData = productsSnapshot.docs.map((doc) => ({
+					id: doc.id,
+					...doc.data(),
+				}));
+				setProducts(productsData);
+				setLoading(false);
+			} catch (error) {
+				console.error("Error fetching products:", error);
+				setLoading(false);
+			}
+		};
+
+		fetchProducts();
+	}, []);
+
+	if (loading) {
+		return <Spinloader />;
+	}
+
 	return (
-		<ProductsContext.Provider value={value}>
+		<ProductsContext.Provider value={products}>
 			{children}
 		</ProductsContext.Provider>
 	);

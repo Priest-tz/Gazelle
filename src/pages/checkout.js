@@ -1,69 +1,104 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/authContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
-import { useShoppingCart } from "../context/cartContext";
 import Navbar from "../components/navigation";
 import SpinLoader from "../components/spinningLoader";
 import Footer from "../components/footer";
 import ShippingOptions from "../components/shipping";
+import { removeCartItem } from "../firebase/firestoreUtils";
+import { useShoppingCart } from "../context/cartContext";
 
 const Checkout = () => {
 	const [isLoading, setIsLoading] = React.useState(true);
-	const [isNavVisible, setIsNavVisible] = React.useState(false);
-	const { cartState, dispatch } = useShoppingCart();
+	const [shippingData, setShippingData] = React.useState(null);
+	const { cartState } = useShoppingCart();
 	const { items: cart } = cartState;
 	const isMounted = React.useRef(true);
+	const { dispatch } = useShoppingCart();
+	const { user } = useAuth();
+	const [localCart, setLocalCart] = React.useState(cart);
 
-	// Effect to handle loading and cleanup
+	React.useEffect(() => {
+		setLocalCart(cart);
+	}, [cart]);
+
 	React.useEffect(() => {
 		isMounted.current = true;
 
-		// Simulate a loading delay for 2 seconds
 		const loadingTimer = setTimeout(() => {
 			if (isMounted.current) {
 				setIsLoading(false);
 			}
-		}, 2000);
+		}, 3000);
 
-		// Cleanup function to avoid memory leaks
 		return () => {
 			isMounted.current = false;
 			clearTimeout(loadingTimer);
 		};
 	}, []);
 
-	const handleRemoveFromCart = (product) => {
-		dispatch({
-			type: "REMOVE_FROM_CART",
-			payload: product,
+	const defaultShippingFee = 4500;
+
+	const handleContinue = (data) => {
+		setShippingData(data);
+	};
+
+	const calculateTotalProductPrice = (cart) => {
+		let totalProductPrice = 0;
+
+		cart.forEach((product) => {
+			totalProductPrice += product.price * product.quantity;
 		});
+
+		return totalProductPrice;
 	};
 
-	// Toggle navigation visibility
-	const toggleNavVisibility = () => {
-		setIsNavVisible(!isNavVisible);
+	const totalProductPrice = calculateTotalProductPrice(cart);
+
+	const calculateTotalSum = () => {
+		const totalProductPrice = calculateTotalProductPrice(cart);
+		const totalSum = totalProductPrice + defaultShippingFee;
+		return totalSum;
 	};
 
-	// Close navigation
-	const closeNav = () => {
-		setIsNavVisible(false);
+	const totalSum = calculateTotalSum();
+
+	const handlePayNow = () => {
+		const totalSum = calculateTotalSum();
+
+		const orderData = {
+			products: cart,
+			totalProductPrice,
+			totalSum,
+			shippingData,
+		};
+
+		console.log("Order Data:", orderData);
+	};
+
+	const handleRemoveFromCart = async (itemKey) => {
+		try {
+			const uid = user.uid;
+
+			const updatedCartItems = await removeCartItem(uid, itemKey);
+
+			setLocalCart(updatedCartItems);
+			dispatch({ type: "UPDATE_CART", payload: updatedCartItems });
+		} catch (error) {
+			console.error("Error removing item from cart: ", error.message);
+		}
 	};
 
 	return (
 		<div className="checkoutPage">
 			{isLoading ? (
-				// Render a spinner while loading
 				<SpinLoader />
 			) : (
 				<>
-					{/* Navbar component */}
-					<Navbar
-						isNavVisible={isNavVisible}
-						toggleNavVisibility={toggleNavVisibility}
-						closeNav={closeNav}
-					/>
+					<Navbar />
 
 					<div className="checkoutHeader">
 						<Link to="/shop" className="backLink">
@@ -73,18 +108,16 @@ const Checkout = () => {
 					</div>
 
 					<div className="checkoutContainer">
-						{/* Checkout content */}
-						{cart.length === 0 ? (
+						{!localCart || localCart.length === 0 ? (
 							<p>
 								Your cart is empty. Add some products from the
 								shop.
 							</p>
 						) : (
 							<>
-								{/* Products in the cart */}
 								<div className="cartContainer">
 									<span className="order">Order Summary</span>
-									{cart.map((product) => (
+									{localCart.map((product) => (
 										<div
 											key={product.id}
 											className="cartItem">
@@ -100,7 +133,7 @@ const Checkout = () => {
 														{product.name}
 													</p>
 													<p className="price">
-														{product.price}
+														₦{product.price}
 													</p>
 												</span>
 												<span className="qty">
@@ -112,25 +145,21 @@ const Checkout = () => {
 												</span>
 												<FontAwesomeIcon
 													icon={faTrash}
-													onClick={() =>
-														handleRemoveFromCart(
-															product
-														)
-													}
 													className="removeFromCartBtn"
 													title="Remove from cart"
+													onClick={() =>
+														handleRemoveFromCart(
+															product.key
+														)
+													}
 												/>
 											</div>
 										</div>
 									))}
 								</div>
 
-								{/* Shipping options */}
-								<ShippingOptions
-									cart={cart}
-								/>
+								<ShippingOptions />
 
-								{/* Total summary and Pay button */}
 								<div className="checkoutFooter">
 									<div className="totalSummary">
 										<span className="summaryHead">
@@ -140,17 +169,20 @@ const Checkout = () => {
 										<div className="content">
 											<span className="totalPrice">
 												Total Product Price: ₦
-												{}
+												{totalProductPrice}
 											</span>
 											<span className="totalshipFee">
-												Shipping Fees: ₦{}
+												Shipping Fees: ₦
+												{defaultShippingFee}
 											</span>
 											<span className="totalSum">
-												Total: ₦{}
+												Total: ₦{totalSum}
 											</span>
 										</div>
 									</div>
-									<button className="checkoutBtn">
+									<button
+										className="checkoutBtn"
+										onClick={handlePayNow}>
 										Pay Now
 									</button>
 								</div>

@@ -1,51 +1,107 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React from "react";
+import { useReducer, createContext, useContext } from "react";
+import { useAuth } from "./authContext";
+import { addCartItem, removeCartItem } from "../firebase/firestoreUtils";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
 
-// Creating a context for the shopping cart to share state
 const ShoppingCartContext = createContext();
 
-// Defining action types
 const ADD_TO_CART = "ADD_TO_CART";
 const REMOVE_FROM_CART = "REMOVE_FROM_CART";
+const SET_CART = "SET_CART";
 
-// Defining a reducer function to manage state changes for the shopping cart
 const cartReducer = (state, action) => {
-	// Switching based on the action type
 	switch (action.type) {
-		// If the action type is "ADD_TO_CART"
 		case ADD_TO_CART:
-			// Returning a new state with the added item to the cart
 			return {
 				...state,
 				items: [...state.items, action.payload],
 			};
-
-		// If the action type is "REMOVE_FROM_CART"
 		case REMOVE_FROM_CART:
-			// Returning a new state with the entry removed from the cart
 			return {
 				...state,
-				items: state.items.filter((item) => item !== action.payload),
+				items: state.items.filter(
+					(_, index) => index !== action.payload
+				),
 			};
-
-		// If the action type doesn't match any case, return the current state
+		case SET_CART:
+			return {
+				...state,
+				items: action.payload,
+			};
 		default:
 			return state;
 	}
 };
 
-// Creating a custom hook to easily access the shopping cart context
 export const useShoppingCart = () => {
 	return useContext(ShoppingCartContext);
 };
 
-// Creating a provider component to wrap the application and provide shopping cart state
 export const ShoppingCartProvider = ({ children }) => {
-	// Using the useReducer hook to manage state with the defined reducer function
+	const { user } = useAuth();
 	const [cartState, dispatch] = useReducer(cartReducer, { items: [] });
 
-	// Providing the shopping cart state and dispatch function through context
+	const addToCart = async (cartItem) => {
+		const itemKey = `${cartItem.productId}-${cartItem.size}`;
+		const existingItemIndex = cartState.items.findIndex(
+			(item) => item.key === itemKey
+		);
+
+		if (existingItemIndex !== -1) {
+			dispatch({
+				type: ADD_TO_CART,
+				payload: {
+					...cartItem,
+					quantity:
+						cartState.items[existingItemIndex].quantity +
+						cartItem.quantity,
+				},
+			});
+		} else {
+			dispatch({
+				type: ADD_TO_CART,
+				payload: { ...cartItem, key: itemKey },
+			});
+		}
+
+		await addCartItem(user?.uid, { ...cartItem, key: itemKey });
+	};
+
+	const removeFromCart = async (itemIndex) => {
+		const itemKey = cartState.items[itemIndex].key;
+		dispatch({ type: REMOVE_FROM_CART, payload: itemIndex });
+		await removeCartItem(user?.uid, itemKey);
+	};
+
+	React.useEffect(() => {
+		const setCartFromFirestore = async () => {
+			try {
+				if (user) {
+					const userDocRef = doc(db, "users", user.uid);
+					const userDoc = await getDoc(userDocRef);
+					const userData = userDoc.data();
+
+					dispatch({
+						type: SET_CART,
+						payload: userData.cart.items || [],
+					});
+				}
+			} catch (error) {
+				console.error(
+					"Error setting cart from Firestore: ",
+					error.message
+				);
+			}
+		};
+
+		setCartFromFirestore();
+	}, [user]);
+
 	return (
-		<ShoppingCartContext.Provider value={{ cartState, dispatch }}>
+		<ShoppingCartContext.Provider
+			value={{ cartState, dispatch, addToCart, removeFromCart }}>
 			{children}
 		</ShoppingCartContext.Provider>
 	);

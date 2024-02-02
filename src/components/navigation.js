@@ -15,7 +15,7 @@ const Navbar = () => {
 			<div className="logo">
 				<NavLink to="/">
 					<img
-						src="https://res.cloudinary.com/dgnb567j3/image/upload/v1705261451/Gazelle/bbxjugmypcsqmsc6pw8i.png"
+						src="https://res.cloudinary.com/dgnb567j3/image/upload/v1704987291/Gazelle/Logo.png"
 						className="name"
 						alt="Logo"
 					/>
@@ -44,12 +44,15 @@ const Navbar = () => {
 
 				<ul className="userMenu">
 					<li>
-						<NavLink to="/user" activeClassName="active">
+						<NavLink to="/auth" activeClassName="active">
 							<FontAwesomeIcon icon={faUser} />
 						</NavLink>
 					</li>
 					<li>
-						<NavLink to="/cart" title="Cart" activeClassName="active">
+						<NavLink
+							to="/checkout"
+							title="Cart"
+							activeClassName="active">
 							<FontAwesomeIcon icon={faShoppingCart} />
 						</NavLink>
 					</li>
