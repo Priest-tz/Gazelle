@@ -99,7 +99,7 @@ const ShopPage = () => {
 					</div>
 
 					<div className="seeMore">
-						<Link to="/all-products">
+						<Link to="">
 							<button type="button">See More</button>
 						</Link>
 					</div>

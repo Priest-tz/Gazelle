@@ -4,7 +4,7 @@ import SpinLoader from "../components/spinningLoader";
 
 const Homepage = () => {
 	const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
-	
+
 	const cloudinaryImages = [
 		"https://res.cloudinary.com/dgnb567j3/image/upload/v1704974060/Gazelle/slideshow_2.jpg",
 		"https://res.cloudinary.com/dgnb567j3/image/upload/v1704987292/Gazelle/slideshow_1.jpg",
