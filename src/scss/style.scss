@@ -821,19 +821,19 @@ footer {
 				display: flex;
 				flex-direction: column;
 				margin: 4px;
-				width: calc(50% - 24px); 
+				width: calc(50% - 24px);
 				box-sizing: border-box;
 
 				@media (max-width: 768px) {
-					width: 100%; 
+					width: 100%;
 				}
 
 				input {
 					width: 100%;
 					height: 36px;
-					margin-top: 2px; 
+					margin-top: 2px;
 					border-radius: 5px;
-					border: 1px solid #ccc; 
+					border: 1px solid #ccc;
 					padding: 10px;
 
 					&::placeholder {
@@ -851,7 +851,7 @@ footer {
 	flex-direction: column;
 	background-color: $primaryBgColor;
 	color: $productTextColor;
-	height: 100%;
+	height: 100vh;
 
 	.checkoutHeader {
 		padding: 28px 20px;
@@ -878,6 +878,13 @@ footer {
 		align-items: center;
 		justify-content: center;
 		gap: 60px;
+
+		.alternate {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			height: 50vh;
+		}
 
 		.cartContainer {
 			display: flex;
@@ -1006,7 +1013,7 @@ footer {
 				flex-direction: column;
 
 				.summaryHead {
-					font-size: 24px; 
+					font-size: 24px;
 					font-weight: $fontWeightMid;
 					padding: 12px;
 					border-bottom: 1px solid $borderColor;
@@ -1023,6 +1030,79 @@ footer {
 					margin-top: 16px;
 					gap: 16px;
 				}
+			}
+		}
+	}
+}
+
+.authPage {
+	background-color: $primaryBgColor;
+	color: $productTextColor;
+	height: 100vh;
+
+	.userLogged {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		height: 60vh;
+		gap: 16px;
+		background-color: $primaryBgColor;
+
+		.userName {
+			font-size: 24px;
+			font-weight: $fontWeightMedium;
+		}
+
+		.logOut {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 200px;
+			height: 44px;
+			border: none;
+			border-radius: 5px;
+			font-size: 16px;
+			font-weight: $fontWeightRegular;
+			background-color: $buttonColor;
+			color: $primaryTextColor;
+		}
+	}
+
+	.noUser {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		background-color: $primaryBgColor;
+		gap: 32px;
+		height: 100vh;
+
+		a {
+			text-decoration: none;
+			font-family: $altFontFamily;
+			font-size: 98px;
+			color: $primaryTextColor;
+
+			@include responsive(768px) {
+				font-size: 62px;
+			}
+		}
+
+		.login {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			width: 280px;
+			height: 44px;
+			border: none;
+			border-radius: 5px;
+			font-size: 12px;
+			font-weight: $fontWeightRegular;
+
+			.googleIcon {
+				margin-right: 8px;
+				font-size: 20px;
 			}
 		}
 	}

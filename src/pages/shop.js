@@ -75,7 +75,12 @@ const ShopPage = () => {
 								className="productCard"
 								onClick={() => handleProductClick(product)}>
 								<img
-									src={product.imageUrl[0]}
+									src={
+										product.imageUrl &&
+										product.imageUrl.length > 0
+											? product.imageUrl[0]
+											: ""
+									}
 									alt={product.brandName}
 									className="productImage"
 								/>
@@ -90,7 +95,8 @@ const ShopPage = () => {
 										<Link title="Add to Cart">
 											<FontAwesomeIcon
 												icon={faShoppingCart}
-												onClick={handleAddToCart}											/>
+												onClick={handleAddToCart}
+											/>
 										</Link>
 									</div>
 								</div>

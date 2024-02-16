@@ -109,10 +109,10 @@ const Checkout = () => {
 
 					<div className="checkoutContainer">
 						{!localCart || localCart.length === 0 ? (
-							<p>
+							<div className="alternate">
 								Your cart is empty. Add some products from the
 								shop.
-							</p>
+							</div>
 						) : (
 							<>
 								<div className="cartContainer">
