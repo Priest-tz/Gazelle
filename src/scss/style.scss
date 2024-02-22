@@ -45,8 +45,8 @@
 
 	.spin {
 		color: $productTextColor;
-		height: 100px;
-		width: 100px;
+		max-height: 100px;
+		max-width: 100px;
 	}
 }
 
@@ -165,7 +165,7 @@
 			margin: 5px 15px;
 			-webkit-transition: all 0.3s ease-in-out;
 			transition: all 0.4s ease-in-out;
-			background-color: $primaryTextColor;
+			background-color: $productTextColor;
 		}
 
 		@include responsive(768px) {
@@ -739,7 +739,7 @@ footer {
 	display: flex;
 	flex-direction: column;
 	background-color: $checkoutBgColor;
-	max-width: 1200px;
+	max-width: 900px;
 	width: 100%;
 	padding: 40px;
 	gap: 12px;
@@ -804,8 +804,7 @@ footer {
 
 		.shippingAddress {
 			display: flex;
-			flex-wrap: wrap;
-			gap: 4px;
+			flex-direction: column;
 
 			.addHead {
 				font-size: 20px;
@@ -817,28 +816,42 @@ footer {
 				}
 			}
 
-			label {
+			.addressDetails {
 				display: flex;
-				flex-direction: column;
-				margin: 4px;
-				width: calc(50% - 24px);
-				box-sizing: border-box;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+				gap: 20px;
 
-				@media (max-width: 768px) {
+				label {
+					display: flex;
+					flex-direction: column;
+					font-size: 16px;
 					width: 100%;
-				}
+					gap: 4px;
 
-				input {
-					width: 100%;
-					height: 36px;
-					margin-top: 2px;
-					border-radius: 5px;
-					border: 1px solid #ccc;
-					padding: 10px;
+					@media (max-width: 768px) {
+						width: 100%;
+					}
 
-					&::placeholder {
-						font-size: 12px;
-						padding: 5px;
+					input {
+						display: flex;
+						width: 60%;
+						height: 40px;
+						font-size: 16px;
+						border-radius: 5px;
+						border: none;
+						outline: none;
+						padding: 8px;
+
+						@media (max-width: 768px) {
+							width: 100%;
+						}
+
+						&::placeholder {
+							font-size: 14px;
+							padding: 4px;
+						}
 					}
 				}
 			}
@@ -851,7 +864,7 @@ footer {
 	flex-direction: column;
 	background-color: $primaryBgColor;
 	color: $productTextColor;
-	height: 100vh;
+	height: 100%;
 
 	.checkoutHeader {
 		padding: 28px 20px;
@@ -877,13 +890,22 @@ footer {
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		gap: 60px;
+		gap: 36px;
+		padding-bottom: 24px;
+
+		@media (max-width: 768px) {
+			padding: 12px 16px;
+		}
 
 		.alternate {
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			height: 50vh;
+			text-align: center;
+			height: 60vh;
+			font-size: 20px;
+			line-height: 1.5;
+			padding: 28px;
 		}
 
 		.cartContainer {
@@ -920,8 +942,8 @@ footer {
 
 				.productImg {
 					img {
-						max-width: 150px;
-						max-height: 150px;
+						max-width: 100px;
+						max-height: 100px;
 						border-radius: 8px;
 					}
 				}
@@ -934,11 +956,11 @@ footer {
 
 					.header {
 						display: flex;
-						justify-content: space-between;
-						gap: 300px;
+						align-items: center;
+						gap: 400px;
 
 						@media (max-width: 768px) {
-							gap: 28px;
+							gap: 44px;
 						}
 
 						.name {
@@ -951,7 +973,7 @@ footer {
 						}
 
 						.price {
-							font-size: 24px;
+							font-size: 20px;
 							font-weight: $fontWeightMid;
 
 							@media (max-width: 768px) {
@@ -974,7 +996,7 @@ footer {
 					}
 					@media (max-width: 768px) {
 						.size {
-							margin-bottom: 30px;
+							margin-bottom: 16px;
 						}
 					}
 				}
@@ -1027,9 +1049,41 @@ footer {
 				.content {
 					display: flex;
 					flex-direction: column;
-					margin-top: 16px;
-					gap: 16px;
+					padding: 20px 24px;
+					gap: 20px;
+
+					.totalPrice,
+					.totalshipFee,
+					.totalSum {
+						display: flex;
+						justify-content: space-between;
+
+						.value {
+							font-size: 18px;
+							font-weight: $fontWeightMid;
+						}
+					}
+
+					.totalSum {
+						span {
+							font-size: 20px;
+						}
+					}
 				}
+			}
+
+			.payBtn {
+				display: flex;
+				align-self: center;
+				align-items: center;
+				justify-content: center;
+				width: 200px;
+				height: 40px;
+				border-radius: 8px;
+				font-size: 16px;
+				border: none;
+				background-color: $buttonColor;
+				color: $primaryTextColor;
 			}
 		}
 	}

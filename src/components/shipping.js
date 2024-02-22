@@ -1,26 +1,21 @@
 import React from "react";
 
-// Function to calculate the shipping fee based on the state
 const calculateShippingFee = (state) => {
 	const isLagos = state.trim().toLowerCase() === "lagos";
 	const shippingFee = isLagos ? 4000 : 5000;
 	return shippingFee;
 };
 
-// ShippingOptions component for selecting shipping options and providing address details
 const ShippingOptions = ({ cart, onContinue, onBack }) => {
-	// State to manage selected shipping option and address details
 	const [shippingOption, setShippingOption] = React.useState("");
 	const [address, setAddress] = React.useState({
 		shippingAddress: "",
 	});
 	const [shippingFee, setShippingFee] = React.useState(0);
 
-	// Handler for changing the selected shipping option
 	const handleOptionChange = (e) => {
 		setShippingOption(e.target.value);
 
-		// If the selected option is "Pickup at the Station," clear the address fields
 		if (e.target.value === "pickup") {
 			setAddress({
 				shippingAddress: "",
@@ -28,20 +23,16 @@ const ShippingOptions = ({ cart, onContinue, onBack }) => {
 		}
 	};
 
-	// Handler for changing address details
 	const handleAddressChange = (e) => {
 		const { name, value } = e.target;
 		setAddress((prevAddress) => ({ ...prevAddress, [name]: value }));
 	};
 
-	// Form submission handler
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
-		// Validate address fields
 		const errors = validateForm(address);
 
-		// If no validation errors, proceed to continue with the selected shipping option and address details
 		if (Object.keys(errors).length === 0) {
 			const productDetails = cart.map((product) => ({
 				productId: product.id,
@@ -61,7 +52,6 @@ const ShippingOptions = ({ cart, onContinue, onBack }) => {
 		}
 	};
 
-	// Function to validate address fields
 	const validateForm = (address) => {
 		const errors = {};
 
@@ -92,7 +82,6 @@ const ShippingOptions = ({ cart, onContinue, onBack }) => {
 		return errors;
 	};
 
-	// JSX structure for the ShippingOptions component
 	return (
 		<div className="shippingContainer">
 			<span className="shipHead">Delivery Information</span>
@@ -119,60 +108,61 @@ const ShippingOptions = ({ cart, onContinue, onBack }) => {
 					</label>
 				</div>
 
-				{/* Display address input fields only when "Delivery" option is selected */}
 				{shippingOption === "delivery" && (
 					<div className="shippingAddress">
 						<span className="addHead">Shipping Address: </span>
-						<label>
-							House Number:
-							<input
-								type="text"
-								name="houseNumber"
-								value={address.houseNumber}
-								onChange={handleAddressChange}
-								placeholder="Enter house number"
-							/>
-						</label>
-						<label>
-							Street Name:
-							<input
-								type="text"
-								name="streetName"
-								value={address.streetName}
-								onChange={handleAddressChange}
-								placeholder="Enter street name"
-							/>
-						</label>
-						<label>
-							Phone Number:
-							<input
-								type="tel"
-								name="phoneNumber"
-								value={address.phoneNumber}
-								onChange={handleAddressChange}
-								placeholder="Enter phone number"
-							/>
-						</label>
-						<label>
-							State:
-							<input
-								type="text"
-								name="state"
-								value={address.state}
-								onChange={handleAddressChange}
-								placeholder="Enter state"
-							/>
-						</label>
-						<label>
-							Email Address:
-							<input
-								type="email"
-								name="emailAddress"
-								value={address.emailAddress}
-								onChange={handleAddressChange}
-								placeholder="Enter email address"
-							/>
-						</label>
+						<form className="addressDetails">
+							<label>
+								House Number:
+								<input
+									type="text"
+									name="houseNumber"
+									value={address.houseNumber}
+									onChange={handleAddressChange}
+									placeholder="Enter house number"
+								/>
+							</label>
+							<label>
+								Street Name:
+								<input
+									type="text"
+									name="streetName"
+									value={address.streetName}
+									onChange={handleAddressChange}
+									placeholder="Enter street name"
+								/>
+							</label>
+							<label>
+								Phone Number:
+								<input
+									type="tel"
+									name="phoneNumber"
+									value={address.phoneNumber}
+									onChange={handleAddressChange}
+									placeholder="Enter phone number"
+								/>
+							</label>
+							<label>
+								State:
+								<input
+									type="text"
+									name="state"
+									value={address.state}
+									onChange={handleAddressChange}
+									placeholder="Enter state"
+								/>
+							</label>
+							<label>
+								Email Address:
+								<input
+									type="email"
+									name="emailAddress"
+									value={address.emailAddress}
+									onChange={handleAddressChange}
+									placeholder="Enter email address"
+								/>
+							</label>
+						</form>
 					</div>
 				)}
 			</form>

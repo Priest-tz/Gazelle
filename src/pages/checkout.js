@@ -20,6 +20,8 @@ const Checkout = () => {
 	const { dispatch } = useShoppingCart();
 	const { user } = useAuth();
 	const [localCart, setLocalCart] = React.useState(cart);
+	const [totalProductPrice, setTotalProductPrice] = React.useState(0);
+	const [totalSum, setTotalSum] = React.useState(0);
 
 	React.useEffect(() => {
 		setLocalCart(cart);
@@ -42,6 +44,13 @@ const Checkout = () => {
 
 	const defaultShippingFee = 4500;
 
+	React.useEffect(() => {
+		const newTotalProductPrice = calculateTotalProductPrice(localCart);
+		const newTotalSum = newTotalProductPrice + defaultShippingFee;
+		setTotalProductPrice(newTotalProductPrice);
+		setTotalSum(newTotalSum);
+	}, [localCart]);
+
 	const handleContinue = (data) => {
 		setShippingData(data);
 	};
@@ -56,15 +65,11 @@ const Checkout = () => {
 		return totalProductPrice;
 	};
 
-	const totalProductPrice = calculateTotalProductPrice(cart);
-
 	const calculateTotalSum = () => {
 		const totalProductPrice = calculateTotalProductPrice(cart);
 		const totalSum = totalProductPrice + defaultShippingFee;
 		return totalSum;
 	};
-
-	const totalSum = calculateTotalSum();
 
 	const handlePayNow = () => {
 		const totalSum = calculateTotalSum();
@@ -167,23 +172,32 @@ const Checkout = () => {
 										</span>
 
 										<div className="content">
-											<span className="totalPrice">
-												Total Product Price: ₦
-												{totalProductPrice}
-											</span>
-											<span className="totalshipFee">
-												Shipping Fees: ₦
-												{defaultShippingFee}
-											</span>
-											<span className="totalSum">
-												Total: ₦{totalSum}
-											</span>
+											<div className="totalPrice">
+												<span>
+													Total Product Price:
+												</span>
+												<span>
+													₦{totalProductPrice}
+												</span>
+											</div>
+											<div className="totalshipFee">
+												<span>Shipping Fees:</span>
+												<span>
+													₦{defaultShippingFee}
+												</span>
+											</div>
+											<div className="totalSum">
+												<span>Total:</span>
+												<span className="value">
+													₦{totalSum}
+												</span>
+											</div>
 										</div>
 									</div>
 									<button
-										className="checkoutBtn"
+										className="payBtn"
 										onClick={handlePayNow}>
-										Pay Now
+										Pay now
 									</button>
 								</div>
 							</>

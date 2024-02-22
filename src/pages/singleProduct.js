@@ -50,10 +50,6 @@ const ProductPage = () => {
 		setSelectedQuantity(quantity);
 	};
 
-	const handleCheckout = () => {
-		navigate("/checkout");
-	};
-
 	const handleAddToCart = async () => {
 		if (product && selectedSize) {
 			const cartItem = {
@@ -72,6 +68,10 @@ const ProductPage = () => {
 				navigate("/auth");
 			}
 		}
+	};
+
+	const handleCheckout = async () => {
+		navigate("/checkout");
 	};
 
 	return (

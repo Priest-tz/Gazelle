@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import SpinLoader from "../components/spinningLoader";
 
 const Homepage = () => {
 	const [currentImageIndex, setCurrentImageIndex] = React.useState(0);

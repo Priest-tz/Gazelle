@@ -14,14 +14,14 @@ const Footer = () => {
 				<div className="text">
 					<h4>Subscribe to our newsletter</h4>
 					<p>
-						Get E-mail updates about our latest releases and offers{" "}
+						Get E-mail updates about our latest releases and offers
 					</p>
 				</div>
 
-				<div className="form">
+				<form className="form">
 					<input type="email" placeholder="Enter your email" />
-					<button>Subscribe</button>
-				</div>
+					<button type="submit">Subscribe</button>
+				</form>
 			</div>
 
 			<div className="policyLinks">

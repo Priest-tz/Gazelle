@@ -4,10 +4,14 @@ import { db } from "./firebase";
 const addUserToFirestore = async (uid, userData) => {
 	const userDocRef = doc(db, "users", uid);
 	try {
-		await setDoc(userDocRef, userData);
-		await updateDoc(userDocRef, {
+		const updatedUserData = {
+			...userData,
+			displayName: userData.displayName,
+			email: userData.email,
 			cart: { items: [] },
-		});
+		};
+
+		await setDoc(userDocRef, updatedUserData);
 
 		console.log("Document written with ID: ", uid);
 	} catch (error) {
@@ -71,13 +75,13 @@ const removeCartItem = async (uid, itemKey) => {
 			},
 		});
 
-		return updatedCartItems; // Return the updated items array
+		return updatedCartItems;
 	} catch (error) {
 		console.error(
 			"Error removing item from cart in Firestore: ",
 			error.message
 		);
-		throw error; // Re-throw the error to handle it in the component
+		throw error;
 	}
 };
 
