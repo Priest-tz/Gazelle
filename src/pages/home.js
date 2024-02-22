@@ -38,10 +38,10 @@ const Homepage = () => {
 								<Link to="/shop">Shop</Link>
 							</li>
 							<li>
-								<Link to="">Sale</Link>
+								<Link to="/">Sale</Link>
 							</li>
 							<li>
-								<Link to="">Contact us</Link>
+								<Link to="/">Contact us</Link>
 							</li>
 						</ul>
 					</nav>
