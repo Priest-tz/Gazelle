@@ -41,7 +41,7 @@ const Homepage = () => {
 								<Link to="/">Sale</Link>
 							</li>
 							<li>
-								<Link to="/">Contact us</Link>
+								<Link to="/contact">Contact us</Link>
 							</li>
 						</ul>
 					</nav>

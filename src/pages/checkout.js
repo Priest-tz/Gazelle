@@ -10,6 +10,7 @@ import Footer from "../components/footer";
 import ShippingOptions from "../components/shipping";
 import { removeCartItem } from "../firebase/firestoreUtils";
 import { useShoppingCart } from "../context/cartContext";
+import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
 
 const Checkout = () => {
 	const [isLoading, setIsLoading] = React.useState(true);
@@ -95,6 +96,33 @@ const Checkout = () => {
 		} catch (error) {
 			console.error("Error removing item from cart: ", error.message);
 		}
+	};
+
+	const config = {
+		public_key: process.env.FLW_TEST_API,
+		tx_ref: Date.now(),
+		amount: totalSum,
+		currency: "NGN",
+		payment_options: "card,mobilemoney,ussd",
+		customer: {
+			email: user.email,
+			name: user.displayName,
+		},
+		customizations: {
+			title: "Gazelle",
+			description: "Payment for items",
+			logo: "https://st2.depositphotos.com/4403291/7418/v/450/depositphotos_74189661-stock-illustration-online-shop-log.jpg",
+		},
+	};
+
+	const fwConfig = {
+		...config,
+		text: "Pay now",
+		callback: (response) => {
+			console.log(response);
+			closePaymentModal();
+		},
+		onClose: () => {},
 	};
 
 	return (
@@ -194,11 +222,11 @@ const Checkout = () => {
 											</div>
 										</div>
 									</div>
-									<button
+
+									<FlutterWaveButton
 										className="payBtn"
-										onClick={handlePayNow}>
-										Pay now
-									</button>
+										{...fwConfig}
+									/>
 								</div>
 							</>
 						)}

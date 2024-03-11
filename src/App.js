@@ -6,6 +6,7 @@ import ShopPage from "./pages/shop";
 import ProductPage from "./pages/singleProduct";
 import Checkout from "./pages/checkout";
 import AuthPage from "./pages/auth";
+import ContactPage from "./pages/contact";
 import { ProductsProvider } from "./context/productsContext";
 import { ShoppingCartProvider } from "./context/cartContext";
 import { AuthProvider } from "./context/authContext";
@@ -48,6 +49,10 @@ function App() {
 									element={<ProductPage />}
 								/>
 								<Route path="/auth" element={<AuthPage />} />
+								<Route
+									path="/contact"
+									element={<ContactPage />}
+								/>
 							</Routes>
 						)}
 					</ProductsProvider>
