@@ -7,7 +7,10 @@ const TransactionStatus = ({ isSuccessful, orderData }) => {
 	return (
 		<div>
 			{isSuccessful ? (
-				<SuccessTransactionUI orderData={orderData} />
+				<SuccessTransactionUI
+					orderData={orderData}
+					navigate={navigate}
+				/>
 			) : (
 				<FailedTransactionUI navigate={navigate} />
 			)}
@@ -15,7 +18,7 @@ const TransactionStatus = ({ isSuccessful, orderData }) => {
 	);
 };
 
-const SuccessTransactionUI = ({ orderData }) => (
+const SuccessTransactionUI = ({ orderData, navigate }) => (
 	<div>
 		<h2>Payment Successful!</h2>
 		<p>Thank you for your order.</p>
