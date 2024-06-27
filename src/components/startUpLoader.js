@@ -1,14 +1,14 @@
 import React from "react";
 import Loaderimage from "../Assets/Actualbull.png";
 
-const startUploader = () => {
+const StartUploader = () => {
 	return (
 		<>
 			<div className="loaderImg">
-				<img src={Loaderimage} />
+				<img src={Loaderimage} alt="Loader" />
 			</div>
 		</>
 	);
 };
 
-export default startUploader;
+export default StartUploader;
