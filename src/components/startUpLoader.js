@@ -1,10 +1,11 @@
 import React from "react";
+import Loaderimage from "../Assets/Actualbull.png";
 
 const startUploader = () => {
 	return (
 		<>
 			<div className="loaderImg">
-				<img src="https://res.cloudinary.com/dgnb567j3/image/upload/v1705261451/Gazelle/bbxjugmypcsqmsc6pw8i.png" />
+				<img src={Loaderimage} />
 			</div>
 		</>
 	);

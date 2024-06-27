@@ -6,7 +6,7 @@ const calculateShippingFee = (state) => {
 	return shippingFee;
 };
 
-const ShippingOptions = ({ cart, onContinue, onBack }) => {
+const ShippingOptions = ({ cart, onContinue }) => {
 	const [shippingOption, setShippingOption] = React.useState("");
 	const [address, setAddress] = React.useState({
 		shippingAddress: "",

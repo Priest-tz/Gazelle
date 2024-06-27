@@ -1,4 +1,5 @@
 import React from "react";
+import { app } from "../firebase/firebase";
 import { Link } from "react-router-dom";
 import { useAuth } from "../context/authContext";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -11,6 +12,7 @@ import ShippingOptions from "../components/shipping";
 import { removeCartItem } from "../firebase/firestoreUtils";
 import { useShoppingCart } from "../context/cartContext";
 import { FlutterWaveButton, closePaymentModal } from "flutterwave-react-v3";
+import TransactionStatus from "./payment";
 
 const Checkout = () => {
 	const [isLoading, setIsLoading] = React.useState(true);
@@ -52,7 +54,7 @@ const Checkout = () => {
 		setTotalSum(newTotalSum);
 	}, [localCart]);
 
-	const handleContinue = (data) => {
+	const handleShipping = (data) => {
 		setShippingData(data);
 	};
 
@@ -72,17 +74,28 @@ const Checkout = () => {
 		return totalSum;
 	};
 
-	const handlePayNow = () => {
-		const totalSum = calculateTotalSum();
+	const orderData = {
+		products: cart,
+		totalProductPrice,
+		totalSum,
+		shippingData,
+		user: {
+			email: user.email,
+		},
+	};
 
-		const orderData = {
-			products: cart,
-			totalProductPrice,
-			totalSum,
-			shippingData,
-		};
+	const handleSuccess = async (orderData) => {
+		try {
+			const orderRef = await app
+				.firestore()
+				.collection("Orders")
+				.add(orderData);
 
-		console.log("Order Data:", orderData);
+			console.log("Order Data:", orderData);
+			console.log("Order document ID:", orderRef.id);
+		} catch (error) {
+			console.error("Error processing order:", error.message);
+		}
 	};
 
 	const handleRemoveFromCart = async (itemKey) => {
@@ -95,11 +108,12 @@ const Checkout = () => {
 			dispatch({ type: "UPDATE_CART", payload: updatedCartItems });
 		} catch (error) {
 			console.error("Error removing item from cart: ", error.message);
+			return;
 		}
 	};
 
 	const config = {
-		public_key: process.env.FLW_TEST_API,
+		public_key: process.env.REACT_APP_FLW,
 		tx_ref: Date.now(),
 		amount: totalSum,
 		currency: "NGN",
@@ -118,9 +132,25 @@ const Checkout = () => {
 	const fwConfig = {
 		...config,
 		text: "Pay now",
-		callback: (response) => {
-			console.log(response);
-			closePaymentModal();
+		callback: async (response) => {
+			const isSuccessful = response.status === "successful";
+			if (isSuccessful) {
+				await handleSuccess(orderData);
+				return (
+					<TransactionStatus
+						isSuccessful={true}
+						orderData={orderData}
+					/>
+				);
+			} else {
+				console.log("Transaction failed");
+				return (
+					<TransactionStatus
+						isSuccessful={false}
+						orderData={orderData}
+					/>
+				);
+			}
 		},
 		onClose: () => {},
 	};

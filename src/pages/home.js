@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import Slideshow1 from "../Assets/slideshow_1.jpg";
+import Slideshow2 from "../Assets/slideshow_2.jpg";
 
 const Homepage = () => {
 	const [currentImageIndex, setCurrentImageIndex] = React.useState(0);
 
-	const cloudinaryImages = [
-		"https://res.cloudinary.com/dgnb567j3/image/upload/v1704974060/Gazelle/slideshow_2.jpg",
-		"https://res.cloudinary.com/dgnb567j3/image/upload/v1704987292/Gazelle/slideshow_1.jpg",
-	];
+	const cloudinaryImages = [Slideshow1, Slideshow2];
 
 	const images = cloudinaryImages;
 
@@ -19,7 +18,7 @@ const Homepage = () => {
 		}, 10000);
 
 		return () => clearInterval(interval);
-	}, [currentImageIndex, images.length]);
+	}, [images.length]);
 
 	return (
 		<>

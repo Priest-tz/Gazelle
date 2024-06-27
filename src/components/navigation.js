@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import Logo from "../Assets/Logo.png"
 
 const Navbar = () => {
 	const [isHamburgerActive, setHamburgerActive] = React.useState(false);
@@ -15,7 +16,7 @@ const Navbar = () => {
 			<div className="logo">
 				<NavLink to="/">
 					<img
-						src="https://res.cloudinary.com/dgnb567j3/image/upload/v1704987291/Gazelle/Logo.png"
+						src={Logo}
 						className="name"
 						alt="Logo"
 					/>
