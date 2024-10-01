@@ -6,11 +6,11 @@ const ProductListing = () => {
 	const products = useSelector((state) => state.products.products);
 
 	return (
-		<div className="flex flex-wrap mx-2 p-8 select-none">
+		<div className="flex flex-wrap mx-2 p-2 select-none">
 			{products.map((product) => (
 				<div
 					key={product.id}
-					className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 py-8 px-3">
+					className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 py-4 px-2">
 					<div
 						className={`relative bg-white rounded-sm shadow-md overflow-hidden h-full transform transition-all duration-300 ${
 							product.available
@@ -45,7 +45,7 @@ const ProductListing = () => {
 										alt={product.name}
 										className="w-full h-full object-cover blur-sm round"
 									/>
-									<div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+									<div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center">
 										<span className="text-white text-lg font-semibold px-4 py-2">
 											Coming Soon
 										</span>
