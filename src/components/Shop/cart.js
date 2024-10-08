@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, updateQuantity } from "../../redux/cartslice";
+import { removeFromCart, updateQuantity } from "../../redux/shop/cartslice";
 import Trending from "./trending";
 
 const Cart = () => {

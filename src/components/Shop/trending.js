@@ -1,13 +1,10 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import shirtFront from "../../data/images/T_shirt_front.jpg";
+import shirtFront from "../../data/images/shirtFront.png";
 import cargo1 from "../../data/images/products/cargo1.jpg";
 import jacket from "../../data/images/products/jacket.jpg";
 import tee from "../../data/images/products/tee.jpeg";
 
 const Trending = () => {
-	const navigate = useNavigate();
-
 	const trendingProducts = [
 		{
 			id: 1,

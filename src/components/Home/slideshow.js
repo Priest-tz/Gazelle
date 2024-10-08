@@ -1,87 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { BiLogoWhatsapp } from "react-icons/bi";
-import bg1 from "../../data/images/slideshow_1.jpg";
-import bg2 from "../../data/images/slideshow_2.jpg";
 
-const HomePage = () => {
-	const [backgroundImage, setBackgroundImage] = useState(bg1);
-	const [backgroundPosition, setBackgroundPosition] = useState("top right");
+import home from "../../data/images/home.jpg";
 
-	const positions = [
-		"right-top",
-		"top",
-		"bottom",
-		"center",
-		"right bottom",
-		" left",
-		"left-bottom",
-		"left-top",
-		"right",
-	];
-
-	useEffect(() => {
-		const intervalId = setInterval(() => {
-			setBackgroundImage((prevImage) => {
-				if (prevImage === bg1) {
-					return bg2;
-				} else {
-					return bg1;
-				}
-			});
-
-			setBackgroundPosition((prevPosition) => {
-				const index = positions.indexOf(prevPosition);
-				if (index === positions.length - 1) {
-					return positions[0];
-				} else {
-					return positions[index + 1];
-				}
-			});
-		}, 5000);
-
-		return () => clearInterval(intervalId);
-	}, []);
-
+const Homeslide = () => {
 	return (
 		<div
-			className="flex flex-col items-center justify-center select-none h-screen relative bg-cover bg-opacity-50 space-y-12 md:space-y-20"
+			className="relative flex flex-col items-center justify-center h-screen select-none space-y-12 md:space-y-20 bg-center bg-cover"
 			style={{
-				backgroundImage: `url(${backgroundImage})`,
-				backgroundPosition,
-				transition:
-					"background-image 4s ease-in-out, background-position 4s ease-in-out",
+				backgroundImage: `url(${home})`,
 			}}>
-			<span className="md:text-8xl text-6xl font-light font-kingthings text-white">
+			{/* Black inset overlay */}
+			<div className="absolute inset-0 bg-black bg-opacity-50"></div>
+
+			{/* Content above the overlay */}
+			<span className="relative z-10 text-6xl font-light text-white font-kingthings md:text-8xl">
 				GAZELLE
 			</span>
-			<nav>
-				<ul className="flex flex-col justify-center items-center text-center space-y-6 text-lg">
+			<nav className="relative z-10">
+				<ul className="flex flex-col items-center justify-center space-y-8 text-center text-lg">
 					<li>
-						<Link to="/shop" className="text-white text-3xl">
+						<Link to="/shop" className="text-3xl text-white">
 							Shop
 						</Link>
 					</li>
 					<li>
-						<Link to="/" className="text-white text-3xl">
-							Sale
+						<Link to="/" className="text-3xl text-white">
+							Gallery
 						</Link>
 					</li>
 					<li>
-						<Link to="/contact" className="text-white text-3xl">
+						<Link to="/" className="text-3xl text-white">
 							Contact Us
 						</Link>
 					</li>
 				</ul>
 			</nav>
-
-			<div className="absolute bottom-8 right-8 md:bottom-20 md:right-20 p-2 bg-white rounded-full">
-				<Link to="/contact">
-					<BiLogoWhatsapp className="text-4xl text-black" />
-				</Link>
-			</div>
 		</div>
 	);
 };
 
-export default HomePage;
+export default Homeslide;

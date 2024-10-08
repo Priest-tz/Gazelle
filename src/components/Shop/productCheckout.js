@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "../../redux/cartslice";
+import { addToCart } from "../../redux/shop/cartslice";
 import { FaArrowLeft } from "react-icons/fa";
 import { GoChevronUp, GoChevronDown } from "react-icons/go";
 import notFoundImage from "../../data/images/Product not found.jpg";

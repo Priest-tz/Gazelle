@@ -12,7 +12,7 @@ const ProductListing = () => {
 					key={product.id}
 					className="w-1/2 sm:w-1/2 md:w-1/3 lg:w-1/4 py-4 px-2">
 					<div
-						className={`relative bg-white rounded-sm shadow-md overflow-hidden h-full transform transition-all duration-300 ${
+						className={`relative overflow-hidden h-full transform transition-all duration-300 ${
 							product.available
 								? "hover:shadow-xl hover:-translate-y-1"
 								: "opacity-80"
@@ -28,11 +28,11 @@ const ProductListing = () => {
 										className="w-full h-full object-cover rounded-md"
 									/>
 								</div>
-								<div className=" flex md:flex-row flex-col justify-between flex-grow">
+								<div className=" flex md:flex-row flex-col justify-around md:p-4 p-2">
 									<h3 className="text-lg font-semibold mb-2 truncate">
 										{product.name}
 									</h3>
-									<p className="text-gray-600 font-medium">
+									<p className="text-gray-600 text-base font-medium">
 										{product.price}
 									</p>
 								</div>
