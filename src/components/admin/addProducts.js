@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct } from "../../redux/shop/productActions"; 
+import { createProduct } from "../../redux/shop/productActions";
 import { useNavigate } from "react-router-dom";
 
 const AddProductForm = () => {
@@ -13,10 +13,11 @@ const AddProductForm = () => {
 	const [colorInput, setColorInput] = useState("");
 	const [quantity, setQuantity] = useState(1);
 	const [images, setImages] = useState([]);
+	const [error, setError] = useState("");
 
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
-	const { token } = useSelector((state) => state.auth); 
+	const { token } = useSelector((state) => state.auth);
 
 	const handleImageUpload = (e) => {
 		const files = Array.from(e.target.files);
@@ -26,24 +27,31 @@ const AddProductForm = () => {
 	const handleFormSubmit = (e) => {
 		e.preventDefault();
 
+		// Validate inputs
+		if (!name || !price || isNaN(price) || quantity <= 0) {
+			setError("Please fill in all fields correctly.");
+			return;
+		}
+
 		// Create FormData to handle file upload
 		const formData = new FormData();
 		formData.append("name", name);
 		formData.append("price", price);
 		formData.append("description", description);
 		formData.append("quantity", quantity);
+
 		sizes.forEach((size) => formData.append("sizes[]", size));
 		colors.forEach((color) => formData.append("colors[]", color));
 		images.forEach((image) => formData.append("images", image));
 
-		// Dispatch createProduct action
 		dispatch(createProduct({ productData: formData, token }))
 			.unwrap()
 			.then(() => {
-				navigate("/admin/products"); 
+				navigate("/admin/products");
 			})
 			.catch((error) => {
 				console.error("Failed to create product: ", error);
+				setError("Failed to create product. Please try again.");
 			});
 	};
 
@@ -61,6 +69,22 @@ const AddProductForm = () => {
 		}
 	};
 
+	const handleRemoveSize = (sizeToRemove) => {
+		setSizes((prevSizes) =>
+			prevSizes.filter((size) => size !== sizeToRemove)
+		);
+	};
+
+	const handleRemoveColor = (colorToRemove) => {
+		setColors((prevColors) =>
+			prevColors.filter((color) => color !== colorToRemove)
+		);
+	};
+
+	const handleRemoveImage = (index) => {
+		setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+	};
+
 	return (
 		<div className="flex justify-center items-center h-screen bg-gray-100 p-4 mt-16 md:mt-0">
 			<form
@@ -70,6 +94,8 @@ const AddProductForm = () => {
 				<span className="text-center text-lg md:text-2xl font-semibold text-gray-700 mb-6">
 					Please Enter Product Information
 				</span>
+
+				{error && <div className="text-red-500">{error}</div>}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					{/* Product Name */}
@@ -123,12 +149,19 @@ const AddProductForm = () => {
 					</label>
 					<div className="flex flex-wrap gap-4">
 						{images.map((image, index) => (
-							<img
-								key={index}
-								src={URL.createObjectURL(image)}
-								alt={`Uploaded ${index + 1}`}
-								className="w-20 h-20 object-cover border rounded-lg"
-							/>
+							<div key={index} className="relative">
+								<img
+									src={URL.createObjectURL(image)}
+									alt={`Uploaded ${index + 1}`}
+									className="w-20 h-20 object-cover border rounded-lg"
+								/>
+								<button
+									type="button"
+									onClick={() => handleRemoveImage(index)}
+									className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">
+									&times;
+								</button>
+							</div>
 						))}
 					</div>
 					<input
@@ -164,8 +197,16 @@ const AddProductForm = () => {
 						</div>
 						<ul className="mt-2">
 							{sizes.map((size, index) => (
-								<li key={index} className="text-gray-600">
+								<li
+									key={index}
+									className="text-gray-600 flex justify-between items-center">
 									{size}
+									<button
+										type="button"
+										onClick={() => handleRemoveSize(size)}
+										className="text-red-500 ml-2">
+										&times;
+									</button>
 								</li>
 							))}
 						</ul>
@@ -193,8 +234,16 @@ const AddProductForm = () => {
 						</div>
 						<ul className="mt-2">
 							{colors.map((color, index) => (
-								<li key={index} className="text-gray-600">
+								<li
+									key={index}
+									className="text-gray-600 flex justify-between items-center">
 									{color}
+									<button
+										type="button"
+										onClick={() => handleRemoveColor(color)}
+										className="text-red-500 ml-2">
+										&times;
+									</button>
 								</li>
 							))}
 						</ul>
@@ -215,11 +264,13 @@ const AddProductForm = () => {
 				</div>
 
 				{/* Submit Button */}
-				<button
-					type="submit"
-					className="w-full bg-green-500 text-white py-3 px-6 rounded-lg text-lg font-semibold hover:bg-green-600 transition">
-					Add Product
-				</button>
+				<div className="flex justify-end">
+					<button
+						type="submit"
+						className="bg-green-500 text-white px-6 py-2 rounded-lg">
+						Add Product
+					</button>
+				</div>
 			</form>
 		</div>
 	);

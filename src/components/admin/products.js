@@ -16,9 +16,9 @@ const Button = ({ onClick, children, type = "button", variant = "solid" }) => {
 			onClick={onClick}
 			className={`px-4 py-2 rounded-md ${
 				variant === "outline"
-					? "border border-gray-300 text-gray-700"
-					: "bg-blue-500 text-white"
-			} hover:bg-blue-600 transition duration-200`}>
+					? "border border-gray-300 text-white bg-red-400"
+					: "bg-green-300 text-white"
+			} hover:bg-green-700 transition duration-200`}>
 			{children}
 		</button>
 	);
@@ -226,7 +226,7 @@ const AddProductForm = ({
 						type="text"
 						value={colorInput}
 						onChange={(e) => setColorInput(e.target.value)}
-						className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+						className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
 					/>
 					<Button type="button" onClick={handleAddColor}>
 						<FiPlus className="inline-block mr-1" /> Add
@@ -252,7 +252,7 @@ const AddProductForm = ({
 					name="quantity"
 					value={formData.quantity}
 					onChange={handleChange}
-					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
 					required
 				/>
 			</div>
@@ -303,7 +303,7 @@ const ProductManager = () => {
 		try {
 			await dispatch(
 				updateProduct({
-					id: updatedProduct.id,
+					id: updatedProduct._id,
 					productData: updatedProduct,
 					token,
 				})
@@ -334,7 +334,32 @@ const ProductManager = () => {
 	};
 
 	if (status === "loading") {
-		return <div className="p-4">Loading...</div>;
+		return (
+			<div className="flex items-center justify-center min-h-screen">
+				<div className="flex flex-col items-center">
+					<svg
+						className="animate-spin h-10 w-10 text-green-600"
+						xmlns="http://www.w3.org/2000/svg"
+						fill="none"
+						viewBox="0 0 24 24">
+						<circle
+							className="opacity-25"
+							cx="12"
+							cy="12"
+							r="10"
+							stroke="currentColor"
+							strokeWidth="4"
+						/>
+						<path
+							className="opacity-75"
+							fill="currentColor"
+							d="M4 12a8 8 0 108-8 8 8 0 00-8 8zm2-8a6 6 0 106 6A6 6 0 006 4z"
+						/>
+					</svg>
+					<p className="mt-2 text-lg text-gray-700">Loading...</p>
+				</div>
+			</div>
+		);
 	}
 
 	if (error) {
@@ -345,9 +370,6 @@ const ProductManager = () => {
 		<div className="flex flex-col p-4 md:p-6 mt-16 md:mt-20 ml-0 md:ml-64">
 			<div className="flex justify-between items-center mb-4">
 				<h1 className="text-xl font-bold">Product Manager</h1>
-				<Button onClick={openModal}>
-					<FiPlus className="inline-block mr-1" /> Add Product
-				</Button>
 			</div>
 
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">

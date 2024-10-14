@@ -3,7 +3,7 @@ import bannerImg from "../../data/images/banner.jpg";
 
 const Banner = () => {
 	return (
-		<div className="relative w-full h-[200px] md:h-[300px] my-4">
+		<div className="relative w-full h-[150px] md:h-[250px] my-4">
 			<img
 				src={bannerImg}
 				alt="Banner"

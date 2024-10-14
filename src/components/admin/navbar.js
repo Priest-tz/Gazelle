@@ -112,7 +112,7 @@ const AdminNavbar = () => {
 			{/* Floating Action Button */}
 			<a
 				href="/admin/addproduct"
-				className="fixed md:bottom-20 md:right-20 bottom-10 right-10 bg-green-600 text-white rounded-full p-6 shadow-lg"
+				className="fixed md:bottom-20 md:right-20 bottom-10 right-10 bg-green-600 text-white rounded-full p-5 shadow-lg"
 				aria-label="Add new item">
 				<FaPlus className="w-6 h-6 font-light" />
 			</a>

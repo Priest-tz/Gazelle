@@ -1,11 +1,14 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 import AdminNavbar from "../admin/navbar";
 
-const AdminLayout = ({ children }) => (
-	<>
-		<AdminNavbar />
-		<div className="flex-grow">{children}</div>
-	</>
-);
+const AdminLayout = () => {
+	return (
+		<div>
+			<AdminNavbar />
+			<Outlet />
+		</div>
+	);
+};
 
 export default AdminLayout;

@@ -1,26 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const adminEmails = ["admin1@example.com", "admin2@example.com"];
-
-const saveTokenToLocalStorage = (token) => {
-	if (token) {
-		localStorage.setItem("token", token);
-	}
-};
-
-const removeTokenFromLocalStorage = () => {
-	localStorage.removeItem("token");
-};
-
-const tokenFromLocalStorage = localStorage.getItem("token");
+const tokenFromStorage = localStorage.getItem("token");
+const isAdminFromStorage = localStorage.getItem("isAdmin") === "true";
 
 const authSlice = createSlice({
 	name: "auth",
 	initialState: {
-		isAuthenticated: !!tokenFromLocalStorage,
-		user: null,
-		token: tokenFromLocalStorage,
-		isAdmin: false,
+		isAuthenticated: !!tokenFromStorage,
+		user: JSON.parse(localStorage.getItem("user")) || null,
+		token: tokenFromStorage,
+		isAdmin: isAdminFromStorage,
 		isLoading: false,
 		error: null,
 	},
@@ -29,10 +18,14 @@ const authSlice = createSlice({
 			state.isAuthenticated = true;
 			state.user = action.payload.user;
 			state.token = action.payload.token;
-			state.isAdmin = adminEmails.includes(action.payload.user.email);
+			state.isAdmin = action.payload.isAdmin;
 			state.isLoading = false;
 			state.error = null;
-			saveTokenToLocalStorage(action.payload.token);
+
+			// Persist user information in localStorage
+			localStorage.setItem("token", action.payload.token);
+			localStorage.setItem("isAdmin", action.payload.isAdmin);
+			localStorage.setItem("user", JSON.stringify(action.payload.user));
 		},
 		logout: (state) => {
 			state.isAuthenticated = false;
@@ -41,7 +34,9 @@ const authSlice = createSlice({
 			state.isAdmin = false;
 			state.isLoading = false;
 			state.error = null;
-			removeTokenFromLocalStorage();
+			localStorage.removeItem("token");
+			localStorage.removeItem("isAdmin");
+			localStorage.removeItem("user");
 		},
 		registrationStart: (state) => {
 			state.isLoading = true;
@@ -51,10 +46,14 @@ const authSlice = createSlice({
 			state.isAuthenticated = true;
 			state.user = action.payload.user;
 			state.token = action.payload.token;
-			state.isAdmin = adminEmails.includes(action.payload.user.email);
+			state.isAdmin = action.payload.isAdmin;
 			state.isLoading = false;
 			state.error = null;
-			saveTokenToLocalStorage(action.payload.token);
+
+			// Persist user information in localStorage
+			localStorage.setItem("token", action.payload.token);
+			localStorage.setItem("isAdmin", action.payload.isAdmin);
+			localStorage.setItem("user", JSON.stringify(action.payload.user));
 		},
 		registrationFailure: (state, action) => {
 			state.isLoading = false;

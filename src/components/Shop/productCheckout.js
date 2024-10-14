@@ -12,8 +12,9 @@ const ProductCheckout = () => {
 	const { productId } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	const products = useSelector((state) => state.products.products);
-	const product = products.find((p) => p.id === parseInt(productId));
+
+	const products = useSelector((state) => state.products?.products || []);
+	const product = products.find((p) => p._id === productId);
 
 	const [selectedSize, setSelectedSize] = useState("");
 	const [selectedColor, setSelectedColor] = useState("");
@@ -44,8 +45,6 @@ const ProductCheckout = () => {
 		);
 	}
 
-	const images = [product.image, product.shirtBack]; 
-	
 	const handleAddToCart = () => {
 		const newErrors = {};
 		if (!selectedSize) newErrors.size = "Please select a size.";
@@ -72,6 +71,7 @@ const ProductCheckout = () => {
 			})
 		);
 
+		// You can replace the alert with a toast notification here
 		alert("Product added to cart!");
 	};
 
@@ -114,25 +114,25 @@ const ProductCheckout = () => {
 					{/* Product Image */}
 					<div className="w-full lg:w-1/2 mb-6 lg:mb-0 lg:pr-6">
 						<img
-							src={images[currentImageIndex]}
+							src={product.images[currentImageIndex].url}
 							alt={`${product.name} - ${
 								selectedColor || "No color selected"
 							}`}
 							className="w-full h-auto object-cover"
 						/>
 						{/* Image Toggle */}
-						<div className="flex justify-center space-x-2 mt-4">
-							{images.map((image, index) => (
+						<div className="flex justify-center space-x-4 mt-4">
+							{product.images.map((image, index) => (
 								<button
 									key={index}
 									onClick={() => handleImageChange(index)}
-									className={`w-10 h-10 border-2 ${
+									className={`w-14 h-14 border-2 ${
 										currentImageIndex === index
 											? "border-black"
 											: "border-transparent"
 									}`}>
 									<img
-										src={image}
+										src={product.images[0].url}
 										alt={`Thumbnail ${index + 1}`}
 										className="w-full h-full object-cover"
 									/>
@@ -142,11 +142,11 @@ const ProductCheckout = () => {
 					</div>
 
 					{/* Product Details */}
-					<div className="w-full lg:w-1/2 lg:pl-6">
+					<div className="w-full lg:w-1/2 lg:pl-6 flex flex-col gap-2">
 						<h3 className="text-2xl font-semibold mb-2">
 							{product.name}
 						</h3>
-						<p className="text-xl font-bold mb-4">
+						<p className="text-xl font-bold mb-4"> &#x20A6;{" "} 
 							{product.price}
 						</p>
 						<p className="text-gray-600 mb-6">
@@ -253,27 +253,27 @@ const ProductCheckout = () => {
 							</div>
 						</div>
 
-						{/* Shipping Options */}
+						{/* Shipping Selection */}
 						<div className="mb-4">
 							<label className="block mb-2 text-gray-700 font-semibold">
-								Select Shipping Option
+								Select Shipping Method
 							</label>
-							<div className="flex space-x-2">
-								{product.shippingOptions.map((option) => (
-									<button
-										key={option}
-										className={`border px-4 py-2 rounded-md text-gray-700 font-semibold ${
-											selectedShipping === option
-												? "border-black"
-												: "border-gray-300"
-										} hover:border-black transition duration-300`}
-										onClick={() =>
-											setSelectedShipping(option)
-										}>
-										{option}
-									</button>
-								))}
-							</div>
+							<select
+								className="border rounded-lg w-full p-2"
+								value={selectedShipping}
+								onChange={(e) =>
+									setSelectedShipping(e.target.value)
+								}>
+								<option value="" disabled>
+									Choose shipping method
+								</option>
+								<option value="standard">
+									Standard Shipping
+								</option>
+								<option value="express">
+									Express Shipping
+								</option>
+							</select>
 							{errors.shipping && (
 								<p className="text-red-600 text-sm mt-1">
 									{errors.shipping}
@@ -281,15 +281,15 @@ const ProductCheckout = () => {
 							)}
 						</div>
 
-						{/* Add to Cart and Checkout Buttons */}
-						<div className="flex items-center space-x-4 mt-6">
+						{/* Add to Cart Button */}
+						<div className="mb-4 mt-10 flex space-x-3  ">
 							<button
-								className="bg-green-700 text-white py-3 px-5 rounded-md"
+								className="bg-green-600 text-white py-4 px-6 rounded-lg"
 								onClick={handleAddToCart}>
 								Add to Cart
 							</button>
 							<button
-								className="bg-black text-white py-3 px-5 rounded-md"
+								className="bg-gray-500 text-white py-4 px-6 rounded-lg"
 								onClick={handleProceedToCheckout}>
 								Proceed to Checkout
 							</button>
@@ -297,6 +297,8 @@ const ProductCheckout = () => {
 					</div>
 				</div>
 			</div>
+
+			{/* Trending Section */}
 			<Trending />
 		</div>
 	);

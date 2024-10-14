@@ -15,7 +15,13 @@ export const login = (email, password) => async (dispatch) => {
 			email,
 			password,
 		});
-		dispatch(loginSuccess({ user: data, token: data.token }));
+		dispatch(
+			loginSuccess({
+				user: data,
+				token: data.token,
+				isAdmin: data.isAdmin,
+			})
+		);
 		return { user: data };
 	} catch (error) {
 		console.error(

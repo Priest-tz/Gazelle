@@ -1,29 +1,28 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAdminProducts } from "../../redux/shop/productActions";
+import React, { useEffect, useState } from "react";
 
 const LiveOrders = () => {
-	const dispatch = useDispatch();
-	const token = useSelector((state) => state.auth.token);
-	const {
-		products: orders,
-		loading,
-		error,
-	} = useSelector((state) => state.product);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const [orders, setOrders] = useState([]);
 
 	useEffect(() => {
-		if (token) {
-			dispatch(getAdminProducts(token));
-		}
-
-		const interval = setInterval(() => {
-			if (token) {
-				dispatch(getAdminProducts(token));
+		const fetchOrders = async () => {
+			try {
+				const response = await fetch("/api/orders");
+				if (!response.ok) {
+					throw new Error("Network response was not ok");
+				}
+				const data = await response.json();
+				setOrders(data);
+			} catch (err) {
+				setError("");
+			} finally {
+				setLoading(false);
 			}
-		}, 30000);
+		};
 
-		return () => clearInterval(interval);
-	}, [dispatch, token]);
+		fetchOrders();
+	}, []);
 
 	return (
 		<div className="flex flex-col items-center p-4">
@@ -32,7 +31,32 @@ const LiveOrders = () => {
 			</h2>
 			<div className="w-full max-w-2xl bg-white rounded-lg shadow-md">
 				{loading ? (
-					<p>Loading orders...</p>
+					<div className="flex items-center justify-center min-h-screen">
+						<div className="flex flex-col items-center">
+							<svg
+								className="animate-spin h-10 w-10 text-green-600"
+								xmlns="http://www.w3.org/2000/svg"
+								fill="none"
+								viewBox="0 0 24 24">
+								<circle
+									className="opacity-25"
+									cx="12"
+									cy="12"
+									r="10"
+									stroke="currentColor"
+									strokeWidth="4"
+								/>
+								<path
+									className="opacity-75"
+									fill="currentColor"
+									d="M4 12a8 8 0 108-8 8 8 0 00-8 8zm2-8a6 6 0 106 6A6 6 0 006 4z"
+								/>
+							</svg>
+							<p className="mt-2 text-lg text-gray-700">
+								Loading...
+							</p>
+						</div>
+					</div>
 				) : error ? (
 					<p className="text-red-600">Error: {error.message}</p>
 				) : orders.length === 0 ? (

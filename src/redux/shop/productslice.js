@@ -7,35 +7,16 @@ import {
 	getAdminProducts,
 } from "./productActions";
 
-import shirtFront from "../../data/images/shirtFront.png";
-import shirtBack from "../../data/images/shirtBack.png";
-
 const initialState = {
-	products: [
-		{
-			id: 1,
-			name: "Classic T-Shirt",
-			price: "$25.00",
-			image: shirtFront,
-			shirtBack,
-			sizes: ["L", "XL"],
-			colors: ["Black"],
-			shippingOptions: ["Standard Shipping", "Express Shipping"],
-			description:
-				"A classic t-shirt made from premium cotton for all-day comfort.",
-			available: true,
-		},
-	], 
-	realProducts: [], 
-	status: "idle", 
+	products: [],
+	status: "idle",
 	error: null,
 };
 
 const productsSlice = createSlice({
 	name: "products",
 	initialState,
-	reducers: {
-	},
+	reducers: {},
 	extraReducers: (builder) => {
 		// Fetch all products (public)
 		builder
@@ -44,7 +25,9 @@ const productsSlice = createSlice({
 			})
 			.addCase(getAllProducts.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				state.realProducts = action.payload; // Store API-fetched products separately
+				state.products = action.payload;
+
+				console.log("Fetched products:", action.payload);
 			})
 			.addCase(getAllProducts.rejected, (state, action) => {
 				state.status = "failed";
@@ -58,7 +41,7 @@ const productsSlice = createSlice({
 			})
 			.addCase(getAdminProducts.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				state.realProducts = action.payload; 
+				state.products = action.payload;
 			})
 			.addCase(getAdminProducts.rejected, (state, action) => {
 				state.status = "failed";
@@ -72,7 +55,7 @@ const productsSlice = createSlice({
 			})
 			.addCase(createProduct.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				state.realProducts.push(action.payload); 
+				state.products.push(action.payload);
 			})
 			.addCase(createProduct.rejected, (state, action) => {
 				state.status = "failed";
@@ -86,11 +69,11 @@ const productsSlice = createSlice({
 			})
 			.addCase(updateProduct.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				const index = state.realProducts.findIndex(
+				const index = state.products.findIndex(
 					(p) => p.id === action.payload.id
 				);
 				if (index !== -1) {
-					state.realProducts[index] = action.payload;
+					state.products[index] = action.payload;
 				}
 			})
 			.addCase(updateProduct.rejected, (state, action) => {
@@ -105,7 +88,7 @@ const productsSlice = createSlice({
 			})
 			.addCase(deleteProduct.fulfilled, (state, action) => {
 				state.status = "succeeded";
-				state.realProducts = state.realProducts.filter(
+				state.products = state.products.filter(
 					(p) => p.id !== action.payload.id
 				);
 			})

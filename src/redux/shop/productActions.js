@@ -71,7 +71,7 @@ export const getAllProducts = createAsyncThunk(
 	"products/getAllProducts",
 	async (_, { rejectWithValue }) => {
 		try {
-			const response = await axios.get(`${BASE_URL}/api/products`);
+			const response = await axios.get(`${BASE_URL}/api/admin/products`);
 			return response.data;
 		} catch (error) {
 			return rejectWithValue(error.response.data);
