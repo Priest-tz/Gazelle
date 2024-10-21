@@ -1,18 +1,17 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const tokenFromStorage = localStorage.getItem("token");
-const isAdminFromStorage = localStorage.getItem("isAdmin") === "true";
+const initialState = {
+	isAuthenticated: false,
+	user: null,
+	token: null,
+	isAdmin: false,
+	isLoading: false,
+	error: null,
+};
 
 const authSlice = createSlice({
 	name: "auth",
-	initialState: {
-		isAuthenticated: !!tokenFromStorage,
-		user: JSON.parse(localStorage.getItem("user")) || null,
-		token: tokenFromStorage,
-		isAdmin: isAdminFromStorage,
-		isLoading: false,
-		error: null,
-	},
+	initialState,
 	reducers: {
 		loginSuccess: (state, action) => {
 			state.isAuthenticated = true;
@@ -21,11 +20,6 @@ const authSlice = createSlice({
 			state.isAdmin = action.payload.isAdmin;
 			state.isLoading = false;
 			state.error = null;
-
-			// Persist user information in localStorage
-			localStorage.setItem("token", action.payload.token);
-			localStorage.setItem("isAdmin", action.payload.isAdmin);
-			localStorage.setItem("user", JSON.stringify(action.payload.user));
 		},
 		logout: (state) => {
 			state.isAuthenticated = false;
@@ -34,9 +28,6 @@ const authSlice = createSlice({
 			state.isAdmin = false;
 			state.isLoading = false;
 			state.error = null;
-			localStorage.removeItem("token");
-			localStorage.removeItem("isAdmin");
-			localStorage.removeItem("user");
 		},
 		registrationStart: (state) => {
 			state.isLoading = true;
@@ -49,11 +40,6 @@ const authSlice = createSlice({
 			state.isAdmin = action.payload.isAdmin;
 			state.isLoading = false;
 			state.error = null;
-
-			// Persist user information in localStorage
-			localStorage.setItem("token", action.payload.token);
-			localStorage.setItem("isAdmin", action.payload.isAdmin);
-			localStorage.setItem("user", JSON.stringify(action.payload.user));
 		},
 		registrationFailure: (state, action) => {
 			state.isLoading = false;
@@ -62,6 +48,7 @@ const authSlice = createSlice({
 	},
 });
 
+// Export actions
 export const {
 	loginSuccess,
 	logout,
@@ -69,4 +56,6 @@ export const {
 	registrationSuccess,
 	registrationFailure,
 } = authSlice.actions;
+
+// Export the reducer
 export default authSlice.reducer;

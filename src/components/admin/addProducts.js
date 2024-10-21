@@ -86,7 +86,7 @@ const AddProductForm = () => {
 	};
 
 	return (
-		<div className="flex justify-center items-center h-screen bg-gray-100 p-4 mt-16 md:mt-0">
+		<div className="flex justify-center items-center h-full bg-gray-100 p-4 mt-16 md:mt-0">
 			<form
 				className="w-full max-w-lg lg:max-w-5xl p-8 bg-white rounded-lg shadow-md space-y-6"
 				onSubmit={handleFormSubmit}>
@@ -95,7 +95,9 @@ const AddProductForm = () => {
 					Please Enter Product Information
 				</span>
 
-				{error && <div className="text-red-500">{error}</div>}
+				{error && (
+					<div className="text-red-500 text-center">{error}</div>
+				)}
 
 				<div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 					{/* Product Name */}
@@ -107,7 +109,7 @@ const AddProductForm = () => {
 							type="text"
 							value={name}
 							onChange={(e) => setName(e.target.value)}
-							className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500"
+							className="w-full p-4 border rounded-lg focus:ring outline-none focus:ring-green-500"
 							placeholder="Enter product name"
 						/>
 					</div>
@@ -121,7 +123,7 @@ const AddProductForm = () => {
 							type="text"
 							value={price}
 							onChange={(e) => setPrice(e.target.value)}
-							className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500"
+							className="w-full p-4 border rounded-lg focus:ring outline-none focus:ring-green-500"
 							placeholder="Enter product price"
 						/>
 					</div>
@@ -137,7 +139,7 @@ const AddProductForm = () => {
 						min="1"
 						value={quantity}
 						onChange={(e) => setQuantity(e.target.value)}
-						className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500"
+						className="w-full p-4 border rounded-lg focus:ring outline-none focus:ring-green-500"
 						placeholder="Enter product quantity"
 					/>
 				</div>
@@ -185,7 +187,7 @@ const AddProductForm = () => {
 								type="text"
 								value={sizeInput}
 								onChange={(e) => setSizeInput(e.target.value)}
-								className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500"
+								className="w-full p-4 border rounded-lg focus:ring focus:ring-green-500 outline-none"
 								placeholder="Add size"
 							/>
 							<button
@@ -222,7 +224,7 @@ const AddProductForm = () => {
 								type="text"
 								value={colorInput}
 								onChange={(e) => setColorInput(e.target.value)}
-								className="w-full p-4 border rounded-lg focus:ring-2 focus:ring-green-500"
+								className="w-full p-4 border rounded-lg focus:ring focus:ring-green-500 outline-none"
 								placeholder="Add color"
 							/>
 							<button
@@ -258,19 +260,17 @@ const AddProductForm = () => {
 					<textarea
 						value={description}
 						onChange={(e) => setDescription(e.target.value)}
-						className="w-full p-4 h-32 border rounded-lg focus:ring-2 focus:ring-green-500"
+						className="w-full p-4 border rounded-lg focus:ring focus:ring-green-500 outline-none"
 						placeholder="Enter product description"
-					/>
+						rows="4"></textarea>
 				</div>
 
 				{/* Submit Button */}
-				<div className="flex justify-end">
-					<button
-						type="submit"
-						className="bg-green-500 text-white px-6 py-2 rounded-lg">
-						Add Product
-					</button>
-				</div>
+				<button
+					type="submit"
+					className="w-full py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+					Add Product
+				</button>
 			</form>
 		</div>
 	);

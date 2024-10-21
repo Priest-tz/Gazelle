@@ -9,12 +9,13 @@ import {
 const BASE_URL = "https://gazelle.onrender.com";
 
 // Login Action
-export const login = (email, password) => async (dispatch) => {
+export const login = (email, password) => async (dispatch, getState) => {
 	try {
 		const { data } = await axios.post(`${BASE_URL}/api/users/auth`, {
 			email,
 			password,
 		});
+
 		dispatch(
 			loginSuccess({
 				user: data,
@@ -22,6 +23,7 @@ export const login = (email, password) => async (dispatch) => {
 				isAdmin: data.isAdmin,
 			})
 		);
+
 		return { user: data };
 	} catch (error) {
 		console.error(

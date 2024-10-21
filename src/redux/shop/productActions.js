@@ -28,7 +28,10 @@ export const createProduct = createAsyncThunk(
 // Update Product
 export const updateProduct = createAsyncThunk(
 	"products/updateProduct",
-	async ({ id, productData, token }, { rejectWithValue }) => {
+	async ({ id, productData }, { getState, rejectWithValue }) => {
+		const state = getState();
+		const token = state.auth.token;
+
 		try {
 			const response = await axios.put(
 				`${BASE_URL}/api/admin/products/${id}`,
@@ -49,7 +52,10 @@ export const updateProduct = createAsyncThunk(
 // Delete Product
 export const deleteProduct = createAsyncThunk(
 	"products/deleteProduct",
-	async ({ id, token }, { rejectWithValue }) => {
+	async ({ id }, { getState, rejectWithValue }) => {
+		const state = getState();
+		const token = state.auth.token;
+
 		try {
 			const response = await axios.delete(
 				`${BASE_URL}/api/admin/products/${id}`,
@@ -65,30 +71,12 @@ export const deleteProduct = createAsyncThunk(
 		}
 	}
 );
-
 // Get All Products (Public)
 export const getAllProducts = createAsyncThunk(
 	"products/getAllProducts",
 	async (_, { rejectWithValue }) => {
 		try {
 			const response = await axios.get(`${BASE_URL}/api/admin/products`);
-			return response.data;
-		} catch (error) {
-			return rejectWithValue(error.response.data);
-		}
-	}
-);
-
-// Get Admin Products (Requires Token)
-export const getAdminProducts = createAsyncThunk(
-	"products/getAdminProducts",
-	async (token, { rejectWithValue }) => {
-		try {
-			const response = await axios.get(`${BASE_URL}/api/admin/products`, {
-				headers: {
-					Authorization: `Bearer ${token}`,
-				},
-			});
 			return response.data;
 		} catch (error) {
 			return rejectWithValue(error.response.data);

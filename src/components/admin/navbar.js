@@ -28,7 +28,6 @@ const AdminNavbar = () => {
 		{ icon: FaCog, text: "Settings", href: "/admin/liveorders" },
 		{ icon: FaLifeRing, text: "Support", href: "/admin/liveorders" },
 		{ icon: FaTag, text: "Promotions", href: "/admin/liveorders" },
-		{ icon: FaSignOutAlt, text: "Logout", href: "/admin" },
 	];
 
 	const handleLogout = () => {
@@ -74,18 +73,14 @@ const AdminNavbar = () => {
 			<aside
 				className={`fixed top-0 left-0 h-full bg-white shadow-lg z-40 transition-all duration-300 ease-in-out
                     ${isMobileMenuOpen ? "w-64" : "w-0 md:w-64"} md:block`}>
-				<div className="h-full flex flex-col">
+				<div className="h-full flex flex-col justify-between">
 					{/* Menu items */}
-					<ul className="flex-1 space-y-8 px-8 py-2 mt-28">
+					<ul className="space-y-8 px-8 py-2 mt-28">
 						{menuItems.map((item, index) => (
 							<li key={index}>
 								<a
 									href={item.href}
-									onClick={
-										item.text === "Logout"
-											? handleLogout // Add the logout handler here
-											: () => setIsMobileMenuOpen(false)
-									}
+									onClick={() => setIsMobileMenuOpen(false)}
 									className="flex items-center space-x-4 text-gray-700 hover:text-green-600 transition-colors duration-200">
 									<item.icon className="w-6 h-6" />
 									<span
@@ -100,10 +95,28 @@ const AdminNavbar = () => {
 							</li>
 						))}
 					</ul>
+
+					{/* Logout item at the bottom */}
+					<div className="p-8">
+						<a
+							href="/admin"
+							onClick={handleLogout}
+							className="flex items-center space-x-4 text-gray-700 hover:text-red-600 transition-colors duration-200">
+							<FaSignOutAlt className="w-6 h-6" />
+							<span
+								className={`${
+									isMobileMenuOpen
+										? "opacity-100"
+										: "opacity-0 md:opacity-100"
+								} transition-opacity duration-200`}>
+								Logout
+							</span>
+						</a>
+					</div>
 				</div>
 			</aside>
 
-			{/* Main content area  */}
+			{/* Main content area */}
 			<main
 				className={`transition-all duration-300 ease-in-out ${
 					isMobileMenuOpen ? "ml-64" : ""

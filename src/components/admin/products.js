@@ -1,24 +1,45 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { createSelector } from "reselect";
 import {
-	getAdminProducts,
 	createProduct,
 	updateProduct,
 	deleteProduct,
 } from "../../redux/shop/productActions";
+import LoadingSpinner from "../common/loadingSpinner";
+import ErrorMessage from "../common/productFetchError";
 import { FiPlus, FiX } from "react-icons/fi";
 
+// Selector for product data
+const selectProductData = createSelector(
+	(state) => state.products?.products,
+	(state) => state.products?.status,
+	(state) => state.products?.error,
+	(products, status, error) => ({
+		products: products || [],
+		status: status || "idle",
+		error: error || null,
+	})
+);
+
 // Button Component
-const Button = ({ onClick, children, type = "button", variant = "solid" }) => {
+const Button = ({
+	onClick,
+	children,
+	type = "button",
+	variant = "solid",
+	disabled = false,
+}) => {
 	return (
 		<button
 			type={type}
 			onClick={onClick}
+			disabled={disabled}
 			className={`px-4 py-2 rounded-md ${
 				variant === "outline"
 					? "border border-gray-300 text-white bg-red-400"
-					: "bg-green-300 text-white"
-			} hover:bg-green-700 transition duration-200`}>
+					: "bg-green-500 text-white"
+			} hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition duration-200`}>
 			{children}
 		</button>
 	);
@@ -78,16 +99,12 @@ const ProductCard = ({ product, onDelete, onEdit, isLoading }) => {
 				</p>
 			</div>
 			<div className="flex flex-col sm:flex-row gap-2 mt-4">
-				<Button
-					onClick={() => onEdit(product)}
-					className="w-full sm:w-auto"
-					disabled={isLoading}>
+				<Button onClick={() => onEdit(product)} disabled={isLoading}>
 					Edit
 				</Button>
 				<Button
-					onClick={() => onDelete(product.id)}
+					onClick={() => onDelete(product._id)}
 					variant="outline"
-					className="w-full sm:w-auto"
 					disabled={isLoading}>
 					Delete
 				</Button>
@@ -157,7 +174,7 @@ const AddProductForm = ({
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		if (editingProduct) {
-			onUpdateProduct({ ...formData, id: editingProduct.id });
+			onUpdateProduct({ ...formData, id: editingProduct._id });
 		} else {
 			onAddProduct(formData);
 		}
@@ -245,154 +262,95 @@ const AddProductForm = ({
 
 			<div className="mt-4">
 				<label className="block text-sm font-medium text-gray-700 mb-1">
-					Quantity in Stock
+					Quantity
 				</label>
 				<input
 					type="number"
 					name="quantity"
 					value={formData.quantity}
 					onChange={handleChange}
-					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-600"
+					className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
 					required
 				/>
 			</div>
 
-			<div className="flex justify-end space-x-2 mt-4">
-				<Button variant="outline" onClick={onClose}>
+			<div className="mt-6 flex justify-end gap-3">
+				<Button type="button" onClick={onClose} variant="outline">
 					Cancel
 				</Button>
 				<Button type="submit">
-					{editingProduct ? "Update Product" : "Add Product"}
+					{editingProduct ? "Update" : "Add"}
 				</Button>
 			</div>
 		</form>
 	);
 };
 
-// ProductManager Component
+//ProductManager Component
 const ProductManager = () => {
 	const dispatch = useDispatch();
-	const {
-		realProducts: products,
-		status,
-		error,
-	} = useSelector((state) => state.products);
-	const { token } = useSelector((state) => state.auth);
+	const { products, status, error } = useSelector(selectProductData);
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [editingProduct, setEditingProduct] = useState(null);
 
-	useEffect(() => {
-		if (token) {
-			dispatch(getAdminProducts(token));
-		}
-	}, [dispatch, token]);
-
-	const handleAddProduct = async (newProduct) => {
-		try {
-			await dispatch(
-				createProduct({ productData: newProduct, token })
-			).unwrap();
-			setIsModalOpen(false);
-		} catch (err) {
-			console.error("Failed to create product:", err);
-		}
+	const handleAddProduct = (newProduct) => {
+		dispatch(createProduct(newProduct));
 	};
 
-	const handleUpdateProduct = async (updatedProduct) => {
-		try {
-			await dispatch(
-				updateProduct({
-					id: updatedProduct._id,
-					productData: updatedProduct,
-					token,
-				})
-			).unwrap();
-			setIsModalOpen(false);
-			setEditingProduct(null);
-		} catch (err) {
-			console.error("Failed to update product:", err);
-		}
+	const handleUpdateProduct = (updatedProduct) => {
+		dispatch(updateProduct(updatedProduct));
 	};
 
-	const handleDeleteProduct = async (id) => {
-		try {
-			await dispatch(deleteProduct({ id, token })).unwrap();
-		} catch (err) {
-			console.error("Failed to delete product:", err);
-		}
+	const handleDeleteProduct = (productId) => {
+		dispatch(deleteProduct(productId));
 	};
 
-	const openModal = () => {
+	const openModal = () => setIsModalOpen(true);
+	const closeModal = () => {
+		setIsModalOpen(false);
 		setEditingProduct(null);
-		setIsModalOpen(true);
 	};
 
-	const openEditModal = (product) => {
+	const handleEditProduct = (product) => {
 		setEditingProduct(product);
-		setIsModalOpen(true);
+		openModal();
 	};
-
-	if (status === "loading") {
-		return (
-			<div className="flex items-center justify-center min-h-screen">
-				<div className="flex flex-col items-center">
-					<svg
-						className="animate-spin h-10 w-10 text-green-600"
-						xmlns="http://www.w3.org/2000/svg"
-						fill="none"
-						viewBox="0 0 24 24">
-						<circle
-							className="opacity-25"
-							cx="12"
-							cy="12"
-							r="10"
-							stroke="currentColor"
-							strokeWidth="4"
-						/>
-						<path
-							className="opacity-75"
-							fill="currentColor"
-							d="M4 12a8 8 0 108-8 8 8 0 00-8 8zm2-8a6 6 0 106 6A6 6 0 006 4z"
-						/>
-					</svg>
-					<p className="mt-2 text-lg text-gray-700">Loading...</p>
-				</div>
-			</div>
-		);
-	}
-
-	if (error) {
-		return <div className="p-4 text-red-500">Error: {error}</div>;
-	}
 
 	return (
-		<div className="flex flex-col p-4 md:p-6 mt-16 md:mt-20 ml-0 md:ml-64">
-			<div className="flex justify-between items-center mb-4">
-				<h1 className="text-xl font-bold">Product Manager</h1>
+		<div className="p-6 md:ml-[250px] lg:ml-[300px]">
+			{" "}
+			<div className="flex justify-between items-center mb-6">
+				<h1 className="text-2xl font-semibold">Product Manager</h1>
 			</div>
-
-			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-				{products.map((product) => (
-					<ProductCard
-						key={product.id}
-						product={product}
-						onEdit={openEditModal}
-						onDelete={handleDeleteProduct}
-						isLoading={status === "loading"}
-					/>
-				))}
+			{/* Loading Spinner */}
+			{status === "loading" && <LoadingSpinner />}
+			{/* Product Grid */}
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+				{products && products.length > 0 ? (
+					products.map((product) => (
+						<ProductCard
+							key={product._id}
+							product={product}
+							onDelete={handleDeleteProduct}
+							onEdit={handleEditProduct}
+							isLoading={status === "loading"}
+						/>
+					))
+				) : (
+					<p className="col-span-full">No products available.</p>
+				)}
 			</div>
-
+			{/* Modal for Adding/Editing Products */}
 			<Modal
 				isOpen={isModalOpen}
-				onClose={() => setIsModalOpen(false)}
-				title={editingProduct ? "Edit Product" : "Add Product"}>
+				onClose={closeModal}
+				title={editingProduct ? "Edit Product" : "Add New Product"}>
 				<AddProductForm
 					onAddProduct={handleAddProduct}
 					editingProduct={editingProduct}
 					onUpdateProduct={handleUpdateProduct}
-					onClose={() => setIsModalOpen(false)}
+					onClose={closeModal}
 				/>
 			</Modal>
 		</div>

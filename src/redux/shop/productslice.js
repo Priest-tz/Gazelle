@@ -4,7 +4,6 @@ import {
 	updateProduct,
 	deleteProduct,
 	getAllProducts,
-	getAdminProducts,
 } from "./productActions";
 
 const initialState = {
@@ -30,20 +29,6 @@ const productsSlice = createSlice({
 				console.log("Fetched products:", action.payload);
 			})
 			.addCase(getAllProducts.rejected, (state, action) => {
-				state.status = "failed";
-				state.error = action.payload;
-			});
-
-		// Fetch admin products (protected route)
-		builder
-			.addCase(getAdminProducts.pending, (state) => {
-				state.status = "loading";
-			})
-			.addCase(getAdminProducts.fulfilled, (state, action) => {
-				state.status = "succeeded";
-				state.products = action.payload;
-			})
-			.addCase(getAdminProducts.rejected, (state, action) => {
 				state.status = "failed";
 				state.error = action.payload;
 			});

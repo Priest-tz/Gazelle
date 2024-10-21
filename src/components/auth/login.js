@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../redux/auth/authActions";
 import home from "../../data/images/home.jpg";
@@ -17,20 +17,30 @@ const Login = () => {
 	const [error, setError] = useState("");
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const authState = useSelector((state) => state.auth);
+
+	useEffect(() => {
+		if (authState.isAuthenticated) {
+			if (authState.isAdmin) {
+				navigate("/admin/products");
+			} else {
+				navigate("/shop");
+			}
+		}
+	}, [authState.isAuthenticated, authState.isAdmin, navigate]);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		setError("");
 		try {
-			const loginResult = await dispatch(login(email, password));
-			if (loginResult) {
-				if (loginResult.user.isAdmin) {
-					navigate("/admin/products");
-				} else {
-					navigate("/shop");
-				}
+			const result = await dispatch(login(email, password));
+			if (!result.user) {
+				setError("Login failed. Please check your credentials.");
 			}
 		} catch (err) {
-			setError("Login failed. Please check your credentials.");
+			setError(
+				err.message || "Login failed. Please check your credentials."
+			);
 		}
 	};
 
