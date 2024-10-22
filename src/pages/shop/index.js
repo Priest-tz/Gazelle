@@ -1,6 +1,6 @@
 import React from "react";
-import Banner from "../../components/shop/banner";
-import ProductListing from "../../components/shop/productListing";
+import Banner from "../../components/shop/Banner";
+import ProductListing from "../../components/shop/ProductListing";
 
 function Shop() {
 	return (

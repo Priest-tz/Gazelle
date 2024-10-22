@@ -4,7 +4,7 @@ import {
 	updateProduct,
 	deleteProduct,
 	getAllProducts,
-} from "./productActions";
+} from "./ProductActions";
 
 const initialState = {
 	products: [],
@@ -12,7 +12,7 @@ const initialState = {
 	error: null,
 };
 
-const productsSlice = createSlice({
+const productSlice = createSlice({
 	name: "products",
 	initialState,
 	reducers: {},
@@ -84,4 +84,4 @@ const productsSlice = createSlice({
 	},
 });
 
-export default productsSlice.reducer;
+export default productSlice.reducer;

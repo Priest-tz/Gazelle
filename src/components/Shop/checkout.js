@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import { clearCart } from "../../redux/shop/cartslice";
+import { clearCart } from "../../redux/shop/CartSlice";
 import { FaArrowLeft } from "react-icons/fa";
 
 const Checkout = () => {

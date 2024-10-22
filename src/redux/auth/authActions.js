@@ -1,10 +1,10 @@
 import axios from "axios";
-import { loginSuccess, logout } from "./authSlice";
+import { loginSuccess, logout } from "./AuthSlice";
 import {
 	registrationStart,
 	registrationSuccess,
 	registrationFailure,
-} from "./authSlice";
+} from "./AuthSlice";
 
 const BASE_URL = "https://gazelle.onrender.com";
 

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createProduct } from "../../redux/shop/productActions";
+import { createProduct } from "../../redux/shop/ProductActions";
 import { useNavigate } from "react-router-dom";
 
 const AddProductForm = () => {

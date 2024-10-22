@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { CiTrash } from "react-icons/ci";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
-import { removeFromCart, updateQuantity } from "../../redux/shop/cartslice";
-import Trending from "./trending";
+import { removeFromCart, updateQuantity } from "../../redux/shop/CartSlice";
+import Trending from "./Trending";
 
 const Cart = () => {
 	const navigate = useNavigate();

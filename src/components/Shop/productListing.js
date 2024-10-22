@@ -2,8 +2,8 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
 import { Link } from "react-router-dom";
-import LoadingSpinner from "../common/loadingSpinner";
-import ErrorMessage from "../common/productFetchError";
+import LoadingSpinner from "../common/LoadingSpinner"
+import ErrorMessage from "../common/ProductFetchError";
 
 const selectProductData = createSelector(
 	(state) => state.products?.products,

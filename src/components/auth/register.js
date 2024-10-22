@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../redux/auth/authActions";
+import { register } from "../../redux/auth/AuthActions";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
 	AiOutlineMail,

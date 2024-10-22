@@ -6,7 +6,7 @@ import { PiBag } from "react-icons/pi";
 import { BiLogOut } from "react-icons/bi";
 import { FaSignInAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutAction } from "../../redux/auth/authActions";
+import { logoutAction } from "../../redux/auth/AuthActions";
 
 const Navbar = () => {
 	const dispatch = useDispatch();

@@ -5,9 +5,9 @@ import {
 	createProduct,
 	updateProduct,
 	deleteProduct,
-} from "../../redux/shop/productActions";
-import LoadingSpinner from "../common/loadingSpinner";
-import ErrorMessage from "../common/productFetchError";
+} from "../../redux/shop/ProductActions";
+import LoadingSpinner from "../common/LoadingSpinner";
+import ErrorMessage from "../common/ProductFetchError";
 import { FiPlus, FiX } from "react-icons/fi";
 
 // Selector for product data
