@@ -8,7 +8,7 @@ import notFoundImage from "../../data/images/Product not found.jpg";
 import sizeguide from "../../data/images/size_guide.jpg";
 import Trending from "./trending";
 
-const ProductCheckout = () => {
+const ProductDetail = () => {
 	const { productId } = useParams();
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -146,8 +146,9 @@ const ProductCheckout = () => {
 						<h3 className="text-2xl font-semibold mb-2">
 							{product.name}
 						</h3>
-						<p className="text-xl font-bold mb-4"> &#x20A6;{" "} 
-							{product.price}
+						<p className="text-xl font-bold mb-4">
+							{" "}
+							&#x20A6; {product.price}
 						</p>
 						<p className="text-gray-600 mb-6">
 							{product.description}
@@ -304,4 +305,4 @@ const ProductCheckout = () => {
 	);
 };
 
-export default ProductCheckout;
+export default ProductDetail;

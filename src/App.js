@@ -10,7 +10,7 @@ import PrivateRoute from "./components/common/privateRoute";
 import Home from "./pages/home/Index";
 import Shop from "./pages/shop/index";
 import Admin from "./pages/admin/Index";
-import ProductCheckout from "./components/shop/productCheckout";
+import ProductDetail from "./components/shop/productdetail";
 import Cart from "./components/shop/cart";
 import Checkout from "./components/shop/checkout";
 import AddProduct from "./components/admin/addProducts";
@@ -39,7 +39,7 @@ function App() {
 						<Route path="/shop" element={<Shop />} />
 						<Route
 							path="/shop/:productId"
-							element={<ProductCheckout />}
+							element={<ProductDetail />}
 						/>
 						<Route path="/cart" element={<Cart />} />
 						<Route path="/pay" element={<Checkout />} />
