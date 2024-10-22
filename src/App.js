@@ -10,7 +10,6 @@ import PrivateRoute from "./components/common/privateRoute";
 import Home from "./pages/home/Index";
 import Shop from "./pages/shop/index";
 import Admin from "./pages/admin/Index";
-import ProductDetail from "./components/shop/productdetail";
 import Cart from "./components/shop/cart";
 import Checkout from "./components/shop/checkout";
 import AddProduct from "./components/admin/addProducts";
@@ -37,10 +36,10 @@ function App() {
 					{/* User routes */}
 					<Route element={<UserLayout />}>
 						<Route path="/shop" element={<Shop />} />
-						<Route
+						{/* <Route
 							path="/shop/:productId"
 							element={<ProductDetail />}
-						/>
+						/> */}
 						<Route path="/cart" element={<Cart />} />
 						<Route path="/pay" element={<Checkout />} />
 					</Route>
