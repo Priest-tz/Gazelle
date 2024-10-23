@@ -1,5 +1,5 @@
 import React from "react";
-import Homeslide from "../../components/home/SlideShow";
+import Homeslide from "../../Components/home/SlideShow";
 
 function Home() {
 	return (

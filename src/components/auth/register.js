@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../redux/auth/AuthActions";
+import { register } from "../../Redux/Auth/AuthActions";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import {
 	AiOutlineMail,
@@ -10,7 +10,7 @@ import {
 	AiOutlineEyeInvisible,
 } from "react-icons/ai";
 import home from "../../data/images/home.jpg";
-import { nigerianStates as states } from "../../data/nigerianStates";
+import { nigerianStates as states } from "../../Data/NigerianStates";
 
 // Admin email list
 const adminEmails = ["admin1@example.com", "admin2@example.com"];

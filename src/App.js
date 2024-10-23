@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { getAllProducts } from "./redux/shop/ProductActions";
+import { getAllProducts } from "./Redux/Shop/ProductActions";
 
-import UserLayout from "./components/layout/UserLayout";
-import AdminLayout from "./components/layout/AdminLayout";
-import PrivateRoute from "./components/common/PrivateRoute";
+import UserLayout from "./Components/layout/UserLayout";
+import AdminLayout from "./Components/layout/AdminLayout";
+import PrivateRoute from "./Components/common/PrivateRoute";
 
-import Home from "./pages/home/Index";
-import Shop from "./pages/shop/Index";
-import Admin from "./pages/admin/Index";
-import ProductDetail from "./components/shop/ProductDetail";
-import Cart from "./components/shop/Cart";
-import Checkout from "./components/shop/Checkout";
-import AddProduct from "./components/admin/AddProducts";
-import LiveOrders from "./components/admin/OrderList";
-import ProductManager from "./components/admin/Products";
-import Login from "./components/auth/Login";
-import Register from "./components/auth/Register";
+import Home from "./Pages/Home/Index";
+import Shop from "./Pages/Shop/Index";
+import Admin from "./Pages/Admin/Index";
+import ProductDetail from "./Components/shop/ProductDetail";
+import Cart from "./Components/shop/Cart";
+import Checkout from "./Components/shop/Checkout";
+import AddProduct from "./Components/admin/AddProducts";
+import LiveOrders from "./Components/admin/OrderList";
+import ProductManager from "./Components/admin/Products";
+import Login from "./Components/auth/Login";
+import Register from "./Components/auth/Register";
 
 function App() {
 	const dispatch = useDispatch();

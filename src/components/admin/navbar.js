@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../../redux/auth/AuthActions";
+import { logoutAction } from "../../Redux/Auth/AuthActions";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { LiaTimesSolid } from "react-icons/lia";
 import {
